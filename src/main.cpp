@@ -127,7 +127,9 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
 	
-
+	cata_track.reset_pos  ();
+	
+	
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
@@ -136,6 +138,8 @@ void opcontrol() {
 		arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_RIGHT_X) * -(double)100 /127);
 							  
+		double cata_r = cata_track.get_position();
+		
 
 		if (master.get_digital(DIGITAL_L1)) {
 			intake.move(-100);
@@ -152,17 +156,19 @@ void opcontrol() {
 
 		
 		
-		if (stopper.get_value() && master.get_digital(DIGITAL_R2))
+		if ( cata_track.get_position() > .6 &&  master.get_digital(DIGITAL_R2))
 		{
 			Cata.move(100);
 			intake.move_relative(1000,100);
 			pros::delay(100);
+			cata_track.reset();
 		}
 		
-		 else if (stopper.get_value())
+		 else if (cata_track.get_position() >=.6)
 		{
 			Cata.brake();
-			Cata.set_brake_mode(MOTOR_BRAKE_BRAKE);
+			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
+			pros::lcd::print(2,"Cata position: %f",cata_r);
 			
             
             
