@@ -1,6 +1,7 @@
 #include "main.h"
 #include "ARMS/config.h"
 #include "Region-config.h"
+#include <iostream>
 
 
 
@@ -127,19 +128,28 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
 	
-	cata_track.reset_pos  ();
+	
 	
 	
 	while (true) {
+		int CataAngle;
+		CataAngle = cata_track.get_angle();
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 		
 		arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_RIGHT_X) * -(double)100 /127);
-							  
-		double cata_r = cata_track.get_position();
+
+
+		printf("Angle: %d", CataAngle); 
 		
+		pros::lcd::print(1, "Cata Angle:%d", CataAngle);
+		
+
+							  
+		cata_track.set_data_rate(5);
+		cata_track.reset_position();
 
 		if (master.get_digital(DIGITAL_L1)) {
 			intake.move(-100);
@@ -156,25 +166,32 @@ void opcontrol() {
 
 		
 		
-		if ( cata_track.get_position() > .6 &&  master.get_digital(DIGITAL_R2))
+		if ( 29700 > CataAngle && master.get_digital(DIGITAL_R2))
 		{
-			Cata.move(100);
+			
+			Cata.move(127);
 			intake.move_relative(1000,100);
-			pros::delay(100);
-			cata_track.reset();
+			pros::delay(250);
+			CataAngle = cata_track.get_angle();
+			
+			
+
 		}
 		
-		 else if (cata_track.get_position() >=.6)
+		 else if ( 29700 > CataAngle )
 		{
+			
 			Cata.brake();
 			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
-			pros::lcd::print(2,"Cata position: %f",cata_r);
-			
-            
+			pros::delay(5);
+			CataAngle = cata_track.get_angle();
             
 		}
-		else {
-			Cata.move(100);
+		else if ( CataAngle > 29800 )
+		{
+			Cata.move(127);
+			pros::delay(5);
+			CataAngle = cata_track.get_angle();
 		}
 		
 
