@@ -16,27 +16,27 @@ namespace arms {
 #define GEARSET pros::E_MOTOR_GEAR_600 // RPM of chassis motors
 
 // Ticks per inch
-#define TPI   	66.4 // Encoder ticks per inch of forward robot movement
-#define MIDDLE_TPI 66.4  // Ticks per inch for the middle wheel
+#define TPI   	110.66// Encoder ticks per inch of forward robot movement
+#define MIDDLE_TPI 110.66  // Ticks per inch for the middle wheel
 
 // Tracking wheel distances
-#define TRACK_WIDTH   7.75// The distance between left and right wheels (or tracker wheels)
-#define MIDDLE_DISTANCE 3.875	// Distance from middle wheel to the robot turning center
+#define TRACK_WIDTH   12.5// The distance between left and right wheels (or tracker wheels)
+#define MIDDLE_DISTANCE 6.375	// Distance from middle wheel to the robot turning center
 
 // Sensors
-#define IMU_PORT     0  // Port 0 for disabled
-#define ENCODER_PORTS 0, 0, 0     // Port 0 for disabled,
+#define IMU_PORT     17  // Port 0 for disabled
+#define ENCODER_PORTS 0, 0, 0      // Port 0 for disabled,
 #define EXPANDER_PORT 0          // Port 0 for disabled
-#define ENCODER_TYPE arms::odom::ENCODER_ADI// The type of encoders
+#define ENCODER_TYPE arms::odom::ENCODER_ROTATION 	// The type of encoders
 
 // Movement tuning
-#define SLEW_STEP 8          // Smaller number = more slew
+#define SLEW_STEP 8          // Smaller number = more slew - slew = slow increase in speed
 #define LINEAR_EXIT_ERROR 2.5 // default exit distance for linear movements
 #define ANGULAR_EXIT_ERROR 1 // default exit distance for angular movement	
 #define SETTLE_THRESH_LINEAR 1     // amount of linear movement for settling
 #define SETTLE_THRESH_ANGULAR 1      // amount of angular movement for settling
 #define SETTLE_TIME 250     // amount of time to count as settled
-#define LINEAR_KP 3
+#define LINEAR_KP 1
 #define LINEAR_KI .001
 #define LINEAR_KD 3
 #define TRACKING_KP 60// point tracking turning strength

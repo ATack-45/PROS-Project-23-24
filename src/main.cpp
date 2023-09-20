@@ -95,7 +95,14 @@ void autonomous() {
 
 
 	if(arms::selector::auton == 1){
+		while (true)
+		{
+			pros::lcd::print(1, "ARMS Error:%d", arms::odom::getDistanceError);
+		}
+		
 	
+	arms::chassis::move(1);
+
 		
 		
 	}
@@ -133,18 +140,37 @@ void opcontrol() {
 	
 	while (true) {
 		int CataAngle;
+		int select_value;
+		std::string select_type;
 		CataAngle = cata_track.get_angle();
+		select_value = drive_select.get_angle();
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+						 
 		
-		arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
+		if (select_value < 10) {
+			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_RIGHT_X) * -(double)100 /127);
-
+		}
+		else if (select_value > 240) {
+			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
+		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
+		}
+		
+		
+		if (select_value < 10){
+			select_type = "Arcade";
+		}
+		else if (select_value > 240){
+			select_type = "tank";
+		}
+		
 
 		printf("Angle: %d", CataAngle); 
 		
 		pros::lcd::print(1, "Cata Angle:%d", CataAngle);
+		pros::lcd::print(2, "drive-select:%s", select_type);
 		
 
 							  
@@ -193,6 +219,7 @@ void opcontrol() {
 			pros::delay(5);
 			CataAngle = cata_track.get_angle();
 		}
+		
 		
 
 		
