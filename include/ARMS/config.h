@@ -11,39 +11,39 @@ namespace arms {
 #define ODOM_DEBUG 1
 
 // Negative numbers mean reversed motor
-#define LEFT_MOTORS 20,19,-18
-#define RIGHT_MOTORS -11, -12,13
+#define LEFT_MOTORS -11,-12,13
+#define RIGHT_MOTORS 20, 19,-18
 #define GEARSET pros::E_MOTOR_GEAR_600 // RPM of chassis motors
 
 // Ticks per inch
-#define TPI   	110.66// Encoder ticks per inch of forward robot movement
-#define MIDDLE_TPI 110.66  // Ticks per inch for the middle wheel
+#define TPI   	49.01// Encoder ticks per inch of forward robot movement
+#define MIDDLE_TPI  0 // Ticks per inch for the middle wheel
 
 // Tracking wheel distances
-#define TRACK_WIDTH   12.5// The distance between left and right wheels (or tracker wheels)
-#define MIDDLE_DISTANCE 6.375	// Distance from middle wheel to the robot turning center
+#define TRACK_WIDTH   12.53501032541676// The distance between left and right wheels (or tracker wheels)
+#define MIDDLE_DISTANCE 0	// Distance from middle wheel to the robot turning center
 
 // Sensors
-#define IMU_PORT     17  // Port 0 for disabled
+#define IMU_PORT     17  // Port 17 for disabled
 #define ENCODER_PORTS 0, 0, 0      // Port 0 for disabled,
 #define EXPANDER_PORT 0          // Port 0 for disabled
 #define ENCODER_TYPE arms::odom::ENCODER_ROTATION 	// The type of encoders
 
 // Movement tuning
-#define SLEW_STEP 8          // Smaller number = more slew - slew = slow increase in speed
-#define LINEAR_EXIT_ERROR 2.5 // default exit distance for linear movements
+#define SLEW_STEP 8      // Smaller number = more slew - slew = slow increase in speed
+#define LINEAR_EXIT_ERROR 1 // default exit distance for linear movements
 #define ANGULAR_EXIT_ERROR 1 // default exit distance for angular movement	
-#define SETTLE_THRESH_LINEAR 1     // amount of linear movement for settling
+#define SETTLE_THRESH_LINEAR .5     // amount of linear movement for settling
 #define SETTLE_THRESH_ANGULAR 1      // amount of angular movement for settling
 #define SETTLE_TIME 250     // amount of time to count as settled
-#define LINEAR_KP 1
-#define LINEAR_KI .001
-#define LINEAR_KD 3
+#define LINEAR_KP 0
+#define LINEAR_KI .00
+#define LINEAR_KD 0
 #define TRACKING_KP 60// point tracking turning strength
-#define ANGULAR_KP .9
-#define ANGULAR_KI 0.04
-#define ANGULAR_KD 1.2
-#define MIN_ERROR 1           // Minimum distance to target before angular componenet is disabled
+#define ANGULAR_KP .797
+#define ANGULAR_KI 0.0
+#define ANGULAR_KD 0.0
+#define MIN_ERROR 5           // Minimum distance to target before angular componenet is disabled
 #define LEAD_PCT .6			 // Go-to-pose lead distance ratio (0-1)
 
 // Auton selector configuration constants

@@ -139,38 +139,47 @@ void opcontrol() {
 	
 	
 	while (true) {
+		/* creating and setting variables*/
 		int CataAngle;
 		int select_value;
 		std::string select_type;
 		CataAngle = cata_track.get_angle();
 		select_value = drive_select.get_angle();
+
+
+		/*screen printing dialouge*/
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+		pros::lcd::set_text(0, "X: " + std::to_string(arms::odom::getPosition().x));
+		pros::lcd::set_text(1, "Y: " + std::to_string(arms::odom::getPosition().y));
+		pros::lcd::set_text(2, "H: " + std::to_string(arms::odom::getHeading()));
+		pros::lcd::set_text(3, "Left: " + std::to_string(arms::odom::getLeftEncoder()));
+		pros::lcd::set_text(4, "Right: " + std::to_string(arms::odom::getRightEncoder()));
+		pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
+		pros::lcd::print(6, "Cata Angle:%d", CataAngle);
+		pros::lcd::print(7, "drive-select:%s", select_type);
 						 
 		
 		if (select_value < 10) {
 			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_RIGHT_X) * -(double)100 /127);
+		                      master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);
+			select_type = "Arcade/Alec";
 		}
 		else if (select_value > 240) {
 			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
-		}
-		
-		
-		if (select_value < 10){
-			select_type = "Arcade";
-		}
-		else if (select_value > 240){
-			select_type = "tank";
+			select_type = "tank/drew";
 		}
 		
 
 		printf("Angle: %d", CataAngle); 
+		if (master.get_digital_new_press(DIGITAL_A)) {
+		arms::odom::reset({0, 0}, 0);
+		arms::chassis::turn(90, arms::ASYNC);
+		pros::delay(3000);
+		}
 		
-		pros::lcd::print(1, "Cata Angle:%d", CataAngle);
-		pros::lcd::print(2, "drive-select:%s", select_type);
 		
 
 							  
