@@ -1,8 +1,5 @@
 #ifndef _ARMS_CONFIG_H_
 #define _ARMS_CONFIG_H_
-extern bool USING_TRACKER_WHEEL;
-
-
 
 #include "ARMS/api.h"
 
@@ -27,7 +24,7 @@ namespace arms {
 
 // Sensors
 #define IMU_PORT     17  // Port 17 for disabled
-#if USING_TRACKER_WHEEL 
+#ifdef USING_TRACKER_WHEEL 
 	#define ENCODER_PORTS 0, 0, 1
 #else
 	#define ENCODER_PORTS 0, 0, 0

@@ -89,7 +89,7 @@ void competition_initialize() {
 	}
 
 	if(arms::selector::auton == 3){  //skills auton
-		USING_TRACKER_WHEEL = true;
+		#define USING_TRACKER_WHEEL true
 		arms::init;
 		T_wheel.set_value(false);
 		
@@ -212,7 +212,7 @@ void opcontrol() {
 		select_value = drive_select.get_angle();
 		cata_track.set_data_rate(5);
 		cata_track.reset_position();
-		select_value = select_value / 125;
+		select_value = select_value / 83.33333;
 
 
 		/*screen printing dialouge*/
@@ -240,7 +240,7 @@ void opcontrol() {
 		if (select_value <= 1) {
 			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);
-			select_type = "Arcade/Alec";
+			select_type = "Alec";
 			//button controls
 			if (master.get_digital(DIGITAL_R1)){
 				intake_movef = true;
@@ -268,16 +268,49 @@ void opcontrol() {
 
 		}
 
-		else if (select_value >= 1) {
-			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
-			select_type = "tank/drew";
+		else if (1 <= select_value <=2) {
+			arms::chassis::arcade(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
+		                      master.get_analog(ANALOG_LEFT_X) * (double)100 /127);
+			select_type = "drew";
 
 			//button controls
 			if (master.get_digital(DIGITAL_R1)){
 				intake_movef = true;
 			}
-			else if (master.get_digital(DIGITAL_L1))
+			else if (master.get_digital(DIGITAL_R2))
+			{
+				intake_moveb = true;
+			}
+			else {
+				intake_movef = false;
+				intake_moveb = false;
+			}
+			if (master.get_digital(DIGITAL_L1)) {
+				cata_shoot = true;
+			}
+			else {
+				cata_shoot = false;
+			}
+			if (master.get_digital(DIGITAL_L2)) {
+				wing_t = true;
+			}
+			else {
+				wing_t = false;
+			}
+
+
+		}
+
+		else if (select_value >= 2) {
+			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
+		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
+			select_type = "parker";
+
+			//button controls
+			if (master.get_digital(DIGITAL_R1)){
+				intake_movef = true;
+			}
+			else if (master.get_digital(DIGITAL_L2))
 			{
 				intake_moveb = true;
 			}
@@ -291,7 +324,7 @@ void opcontrol() {
 			else {
 				cata_shoot = false;
 			}
-			if (master.get_digital(DIGITAL_L2)) {
+			if (master.get_digital(DIGITAL_L1)) {
 				wing_t = true;
 			}
 			else {
