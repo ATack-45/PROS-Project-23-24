@@ -156,6 +156,7 @@ void autonomous() {
 	}
 
 	if(arms::selector::auton == 3){  //skills auton
+		#define USING_TRACKER_WHEEL = true
 		
 	}
 
