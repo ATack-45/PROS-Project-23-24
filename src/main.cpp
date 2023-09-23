@@ -58,23 +58,46 @@ void disabled() {
  */
 void competition_initialize() {
 	arms::selector::init;
+	int auto_v; 
+	auto_v = auto_select.get_angle() / 62.5;
+
+	if (auto_v <= 1) {
+		arms::selector::auton == 1;
+	}	
+	else if ( 1< auto_v <=2 )
+	{
+		arms::selector::auton == 2;
+	}
+	else if ( 2< auto_v <=3 )
+	{
+		arms::selector::auton == 3;
+	}
+	else if ( 3< auto_v <=4 )
+	{
+		arms::selector::auton == 4;
+	}
+	
 
 	if(arms::selector::auton == 1){ // close side 
 		arms::init;
+		T_wheel.set_value(true);
 	}
 
 	if(arms::selector::auton == 2){  //far side	
 		arms::init;
+		T_wheel.set_value(true);
 	}
 
 	if(arms::selector::auton == 3){  //skills auton
 		USING_TRACKER_WHEEL = true;
 		arms::init;
+		T_wheel.set_value(false);
 		
 	}
 
 	if(arms::selector::auton == 4){  //do nothing
 		arms::init;
+		T_wheel.set_value(true);
 	}
 
 }
@@ -90,6 +113,27 @@ void competition_initialize() {
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+
+//auto cata commands
+void load() {
+	int CataAngle_a = cata_track.get_angle();
+	while (true) {
+    
+    if ( 29700 > CataAngle_a)
+		{
+			Cata.brake();
+			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
+            break;
+            
+		}
+		else {
+			Cata.move(100);
+		}
+    }
+}
+void fire() {
+	Cata.move_relative(1000,100);
+}
 void autonomous() {
 	
 	arms::odom::reset({0,0},0);
@@ -168,6 +212,7 @@ void opcontrol() {
 		select_value = drive_select.get_angle();
 		cata_track.set_data_rate(5);
 		cata_track.reset_position();
+		select_value = select_value / 125;
 
 
 		/*screen printing dialouge*/
@@ -192,7 +237,7 @@ void opcontrol() {
 		}
 						 
 		// controller profiles
-		if (select_value < 10) {
+		if (select_value <= 1) {
 			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);
 			select_type = "Arcade/Alec";
@@ -223,7 +268,7 @@ void opcontrol() {
 
 		}
 
-		else if (select_value > 240) {
+		else if (select_value >= 1) {
 			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
 			select_type = "tank/drew";
@@ -297,7 +342,6 @@ void opcontrol() {
 			wing_toggle();
 		}
 		
-
 		pros::delay(20);
 	}
 }
