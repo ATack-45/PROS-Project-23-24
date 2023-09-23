@@ -6,6 +6,7 @@
 
 
 
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -35,7 +36,6 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::register_btn1_cb(on_center_button);
-	arms::init();
 }
 
 
@@ -60,19 +60,21 @@ void competition_initialize() {
 	arms::selector::init;
 
 	if(arms::selector::auton == 1){ // close side 
-		
+		arms::init;
 	}
 
 	if(arms::selector::auton == 2){  //far side	
-		
+		arms::init;
 	}
 
 	if(arms::selector::auton == 3){  //skills auton
+		USING_TRACKER_WHEEL = true;
+		arms::init;
 		
 	}
 
 	if(arms::selector::auton == 4){  //do nothing
-		
+		arms::init;
 	}
 
 }
@@ -106,10 +108,10 @@ void autonomous() {
 
 	if(arms::selector::auton == 2){  //far side
 		
+		
 	}
 
 	if(arms::selector::auton == 3){  //skills auton
-		#define USING_TRACKER_WHEEL true
 		
 	}
 

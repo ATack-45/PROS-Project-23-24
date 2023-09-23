@@ -1,9 +1,11 @@
 #ifndef _ARMS_CONFIG_H_
 #define _ARMS_CONFIG_H_
-#define USING_TRACKER_WHEEL true
+extern bool USING_TRACKER_WHEEL;
+
 
 
 #include "ARMS/api.h"
+
 
 namespace arms {
 
