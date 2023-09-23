@@ -1,9 +1,9 @@
 #ifndef _ARMS_CONFIG_H_
 #define _ARMS_CONFIG_H_
+#define USING_TRACKER_WHEEL true
+
 
 #include "ARMS/api.h"
-
-
 
 namespace arms {
 
@@ -25,7 +25,12 @@ namespace arms {
 
 // Sensors
 #define IMU_PORT     17  // Port 17 for disabled
-#define ENCODER_PORTS 0, 0, 0      // Port 0 for disabled,
+#if USING_TRACKER_WHEEL 
+	#define ENCODER_PORTS 0, 0, 0
+#else
+	#define ENCODER_PORTS 0, 0, 0
+#endif
+
 #define EXPANDER_PORT 0          // Port 0 for disabled
 #define ENCODER_TYPE arms::odom::ENCODER_ROTATION 	// The type of encoders
 

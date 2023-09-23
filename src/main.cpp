@@ -1,6 +1,7 @@
 #include "main.h"
 #include "ARMS/config.h"
 #include "Region-config.h"
+#include "pros/adi.hpp"
 #include <iostream>
 
 
@@ -11,6 +12,8 @@
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
+
+//area for custom functions
 void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
@@ -21,6 +24,8 @@ void on_center_button() {
 	}
 }
 
+
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -28,33 +33,12 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	
 	pros::lcd::initialize();
-	
-
 	pros::lcd::register_btn1_cb(on_center_button);
 	arms::init();
-	
 }
 
-void load() {
-    while (true) {
-    
-    if (stopper.get_value())
-		{
-			Cata.brake();
-			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
-            break;
-            
-		}
-		else {
-			Cata.move(100);
-		}
-    }
-}
-void fire() {
-	Cata.move_relative(400,100);
-}
+
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
@@ -74,6 +58,23 @@ void disabled() {
  */
 void competition_initialize() {
 	arms::selector::init;
+
+	if(arms::selector::auton == 1){ // close side 
+		
+	}
+
+	if(arms::selector::auton == 2){  //far side	
+		
+	}
+
+	if(arms::selector::auton == 3){  //skills auton
+		
+	}
+
+	if(arms::selector::auton == 4){  //do nothing
+		
+	}
+
 }
 
 /**
@@ -94,26 +95,27 @@ void autonomous() {
 	arms::selector::destroy();
 
 
-	if(arms::selector::auton == 1){
+	if(arms::selector::auton == 1){ // close side
 		while (true)
 		{
 			pros::lcd::print(1, "ARMS Error:%d", arms::odom::getDistanceError);
 		}
-		
-	
 	arms::chassis::move(1);
 
-		
+	}
+
+	if(arms::selector::auton == 2){  //far side
 		
 	}
 
-	if(arms::selector::auton == 2){ 
+	if(arms::selector::auton == 3){  //skills auton
+		#define USING_TRACKER_WHEEL true
 		
-	 }
+	}
 
-	 
-
-	
+	if(arms::selector::auton == 4){  //do nothing
+		
+	}
 	
 }
 
@@ -130,21 +132,40 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+// function for wing deploy
+bool wing_state;
+	void wing_toggle() {
+		if (wing_state) {
+			wings.set_value(false);
+			wing_state = false;
+		}
+		else {
+			wings.set_value(true);
+			wing_state = true;
+		}
+	}
+
 void opcontrol() {
 	arms::selector::destroy();
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
 	
 	
-	
-	
 	while (true) {
 		/* creating and setting variables*/
 		int CataAngle;
-		int select_value;
+		int select_value; 
+		bool intake_movef;
+		bool intake_moveb;
+		bool cata_shoot;
+		bool wing_t;
+		bool wing_state;
 		std::string select_type;
 		CataAngle = cata_track.get_angle();
 		select_value = drive_select.get_angle();
+		cata_track.set_data_rate(5);
+		cata_track.reset_position();
 
 
 		/*screen printing dialouge*/
@@ -159,68 +180,108 @@ void opcontrol() {
 		pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
 		pros::lcd::print(6, "Cata Angle:%d", CataAngle);
 		pros::lcd::print(7, "drive-select:%s", select_type);
-						 
-		
-		if (select_value < 10) {
-			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);
-			select_type = "Arcade/Alec";
-		}
-		else if (select_value > 240) {
-			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
-			select_type = "tank/drew";
-		}
-		
 
-		printf("Angle: %d", CataAngle); 
+
+		//odom and PID tuning dialouge
 		if (master.get_digital_new_press(DIGITAL_A)) {
 		arms::odom::reset({0, 0}, 0);
 		arms::chassis::turn(90, arms::ASYNC);
 		pros::delay(3000);
 		}
-		
-		
+						 
+		// controller profiles
+		if (select_value < 10) {
+			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
+		                      master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);
+			select_type = "Arcade/Alec";
+			//button controls
+			if (master.get_digital(DIGITAL_R1)){
+				intake_movef = true;
+			}
+			else if (master.get_digital(DIGITAL_L1))
+			{
+				intake_moveb = true;
+			}
+			else {
+				intake_movef = false;
+				intake_moveb = false;
+			}
+			if (master.get_digital(DIGITAL_R2)) {
+				cata_shoot = true;
+			}
+			else {
+				cata_shoot = false;
+			}
+			if (master.get_digital(DIGITAL_L2)) {
+				wing_t = true;
+			}
+			else {
+				wing_t = false;
+			}
 
-							  
-		cata_track.set_data_rate(5);
-		cata_track.reset_position();
+		}
 
-		if (master.get_digital(DIGITAL_L1)) {
-			intake.move(-100);
+		else if (select_value > 240) {
+			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
+		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
+			select_type = "tank/drew";
+
+			//button controls
+			if (master.get_digital(DIGITAL_R1)){
+				intake_movef = true;
+			}
+			else if (master.get_digital(DIGITAL_L1))
+			{
+				intake_moveb = true;
+			}
+			else {
+				intake_movef = false;
+				intake_moveb = false;
+			}
+			if (master.get_digital(DIGITAL_R2)) {
+				cata_shoot = true;
+			}
+			else {
+				cata_shoot = false;
+			}
+			if (master.get_digital(DIGITAL_L2)) {
+				wing_t = true;
+			}
+			else {
+				wing_t = false;
+			}
+
+
+		}
+
+		//intake controls
+		if (intake_movef) {
+			intake.move(100);
 		}
 		
-		else if (master.get_digital(DIGITAL_R1)){
-			intake.move(100);
+		else if (intake_moveb){
+			intake.move(-100);
 		}
 		
 		else {
 			intake.move(0);
-		
 		}
-
 		
-		
-		if ( 29700 > CataAngle && master.get_digital(DIGITAL_R2))
+		//cata controls
+		if ( 29700 > CataAngle && cata_shoot)
 		{
-			
 			Cata.move(127);
 			intake.move_relative(1000,100);
 			pros::delay(250);
 			CataAngle = cata_track.get_angle();
-			
-			
-
 		}
 		
 		 else if ( 29700 > CataAngle )
 		{
-			
 			Cata.brake();
 			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
 			pros::delay(5);
 			CataAngle = cata_track.get_angle();
-            
 		}
 		else if ( CataAngle > 29800 )
 		{
@@ -228,10 +289,13 @@ void opcontrol() {
 			pros::delay(5);
 			CataAngle = cata_track.get_angle();
 		}
-		
+
+		//wings control
+		if (wing_t) {
+			wing_toggle();
+		}
 		
 
-		
 		pros::delay(20);
 	}
 }
