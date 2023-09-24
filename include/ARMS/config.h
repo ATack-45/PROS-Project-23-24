@@ -75,3 +75,8 @@ inline void init() {
 } // namespace arms
 
 #endif
+
+void Close();
+void far();
+void skills();
+void nothing();

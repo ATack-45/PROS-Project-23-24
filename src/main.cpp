@@ -60,44 +60,35 @@ void competition_initialize() {
 	arms::selector::init;
 	int auto_v; 
 	auto_v = auto_select.get_angle() / 62.5;
+	auto_v = floor(auto_v);
 
-	if (auto_v <= 1) {
-		arms::selector::auton == 1;
-	}	
-	else if ( 1< auto_v <=2 )
+	while (true)
 	{
-		arms::selector::auton == 2;
-	}
-	else if ( 2< auto_v <=3 )
-	{
-		arms::selector::auton == 3;
-	}
-	else if ( 3< auto_v <=4 )
-	{
-		arms::selector::auton == 4;
-	}
-	
-
-	if(arms::selector::auton == 1){ // close side 
-		arms::init;
-		T_wheel.set_value(true);
-	}
-
-	if(arms::selector::auton == 2){  //far side	
-		arms::init;
-		T_wheel.set_value(true);
-	}
-
-	if(arms::selector::auton == 3){  //skills auton
-		#define USING_TRACKER_WHEEL true
-		arms::init;
-		T_wheel.set_value(false);
+		switch (auto_v)
+		{
+		case 1:
+			arms::selector::auton == 1;
+			arms::init;
+			return;
+		case 2:
+			arms::selector::auton == 2;
+			arms::init;
+			return;
+		case 3:
+			#define USING_TRACKER_WHEEL
+			arms::selector::auton == 3;
+			arms::init;
+			return;
+		case 4:
+			arms::selector::auton == 4;
+			arms::init;
+			return;
 		
-	}
-
-	if(arms::selector::auton == 4){  //do nothing
-		arms::init;
-		T_wheel.set_value(true);
+		default:
+			arms::selector::auton == 4;
+			arms::init;
+			return;
+		}
 	}
 
 }
@@ -139,30 +130,29 @@ void autonomous() {
 	arms::odom::reset({0,0},0);
 	arms::odom::imu.reset();
 	arms::selector::destroy();
+	pros::lcd::print(1, "ARMS auto:%d", arms::selector::auton);
 
 
-	if(arms::selector::auton == 1){ // close side
-		while (true)
-		{
-			pros::lcd::print(1, "ARMS Error:%d", arms::odom::getDistanceError);
-		}
-	arms::chassis::move(1);
+  switch (arms::selector::auton) {
+    case 1:
+      Close();
+      break;
+    case 2:
+      
+      break;
+    case 3:
+      
+      break;
+    case 4:
+      
+      break;
+    case 0:
+      
+      break;
+  }
 
-	}
 
-	if(arms::selector::auton == 2){  //far side
-		
-		
-	}
 
-	if(arms::selector::auton == 3){  //skills auton
-		#define USING_TRACKER_WHEEL = true
-		
-	}
-
-	if(arms::selector::auton == 4){  //do nothing
-		
-	}
 	
 }
 
