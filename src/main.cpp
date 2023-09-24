@@ -62,8 +62,9 @@ void competition_initialize() {
 	auto_v = auto_select.get_angle() / 62.5;
 	auto_v = floor(auto_v);
 
-	while (true)
+	while (true) //loop to update selection while controller is connected
 	{
+		/*switch returns value of () and uses appropiate case, more efficent than if, elif because it only checks once */
 		switch (auto_v)
 		{
 		case 1:
@@ -132,8 +133,8 @@ void autonomous() {
 	arms::selector::destroy();
 	pros::lcd::print(1, "ARMS auto:%d", arms::selector::auton);
 
-
-  switch (arms::selector::auton) {
+/*switch returns value of () and uses appropiate case, more efficent than if, elif because it only checks once */
+  switch (arms::selector::auton) { 
     case 1:
       Close();
       break;
@@ -150,10 +151,6 @@ void autonomous() {
       
       break;
   }
-
-
-
-	
 }
 
 /**
@@ -188,7 +185,6 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
 	
-	
 	while (true) {
 		/* creating and setting variables*/
 		int CataAngle;
@@ -204,7 +200,6 @@ void opcontrol() {
 		cata_track.set_data_rate(5);
 		cata_track.reset_position();
 		select_value = select_value / 83.33333;
-
 
 		/*screen printing dialouge*/
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
@@ -321,8 +316,6 @@ void opcontrol() {
 			else {
 				wing_t = false;
 			}
-
-
 		}
 
 		//intake controls
