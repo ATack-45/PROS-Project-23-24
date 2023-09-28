@@ -34,8 +34,15 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	arms::init();
 	pros::lcd::initialize();
+	//arms::selector::init;
 	pros::lcd::register_btn1_cb(on_center_button);
+	
+	int auto_v; 
+	auto_v = auto_select.get_angle() / 62.5;
+	auto_v = floor(auto_v);
+	
 }
 
 
@@ -57,40 +64,19 @@ void disabled() {
  * starts.
  */
 void competition_initialize() {
-	arms::selector::init;
+	arms::init();
+	pros::lcd::initialize();
+	//arms::selector::init;
+	//updates pot for a value
+	
 	int auto_v; 
 	auto_v = auto_select.get_angle() / 62.5;
 	auto_v = floor(auto_v);
+	pros::lcd::print(2, "Pot auto:%d", auto_v);
+	
+	
+	
 
-	while (true) //loop to update selection while controller is connected
-	{
-		/*switch returns value of () and uses appropiate case, more efficent than if, elif because it only checks once */
-		switch (auto_v)
-		{
-		case 1:
-			arms::selector::auton == 1;
-			arms::init;
-			return;
-		case 2:
-			arms::selector::auton == 2;
-			arms::init;
-			return;
-		case 3:
-			#define USING_TRACKER_WHEEL
-			arms::selector::auton == 3;
-			arms::init;
-			return;
-		case 4:
-			arms::selector::auton == 4;
-			arms::init;
-			return;
-		
-		default:
-			arms::selector::auton == 4;
-			arms::init;
-			return;
-		}
-	}
 
 }
 
@@ -107,9 +93,10 @@ void competition_initialize() {
  */
 
 //auto cata commands
+
 void load() {
 	int CataAngle_a = cata_track.get_angle();
-	while (true) {
+	while (true) {	
     
     if ( 29700 > CataAngle_a)
 		{
@@ -123,34 +110,49 @@ void load() {
 		}
     }
 }
+
 void fire() {
 	Cata.move_relative(1000,100);
 }
 void autonomous() {
-	
+	int auto_v; 
+	auto_v = floor(auto_select.get_value() /750);
+	pros::lcd::print(2, "Pot auto:%d", auto_v);
+	pros::lcd::print(3, "Pot auto:%d", auto_select.get_value());
 	arms::odom::reset({0,0},0);
 	arms::odom::imu.reset();
 	arms::selector::destroy();
 	pros::lcd::print(1, "ARMS auto:%d", arms::selector::auton);
+	
+if (auto_v >= 5) {
+	switch (arms::selector::auton)
+	{
+	case 3:
+		/*  do nothing code */
+		break;
+	
+	case 0:
+		//skills
+		break;
+	}
+}
+else {
+	switch (auto_v)
+	{
+	case 0: // 4 on wheel
+		/* nothing code */
+		break;
 
+	case 1: // 3 on wheel
+		/* far side */
+		break;
+	
+	case 3: // 2 on wheel
+		Close();
+		break;
+	}
+}
 /*switch returns value of () and uses appropiate case, more efficent than if, elif because it only checks once */
-  switch (arms::selector::auton) { 
-    case 1:
-      Close();
-      break;
-    case 2:
-      
-      break;
-    case 3:
-      
-      break;
-    case 4:
-      
-      break;
-    case 0:
-      
-      break;
-  }
 }
 
 /**
@@ -172,15 +174,18 @@ bool wing_state;
 	void wing_toggle() {
 		if (wing_state) {
 			wings.set_value(false);
+			pros::delay(1000);
 			wing_state = false;
 		}
 		else {
 			wings.set_value(true);
+			pros::delay(1000);
 			wing_state = true;
 		}
 	}
 
 void opcontrol() {
+	arms::init();
 	arms::selector::destroy();
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
@@ -196,10 +201,15 @@ void opcontrol() {
 		bool wing_state;
 		std::string select_type;
 		CataAngle = cata_track.get_angle();
-		select_value = drive_select.get_angle();
+		select_value = floor(drive_select.get_value() / 1400);
 		cata_track.set_data_rate(5);
 		cata_track.reset_position();
-		select_value = select_value / 83.33333;
+		
+		
+
+
+
+		
 
 		/*screen printing dialouge*/
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
@@ -212,7 +222,7 @@ void opcontrol() {
 		pros::lcd::set_text(4, "Right: " + std::to_string(arms::odom::getRightEncoder()));
 		pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
 		pros::lcd::print(6, "Cata Angle:%d", CataAngle);
-		pros::lcd::print(7, "drive-select:%s", select_type);
+		pros::lcd::print(7, "drive-select:%d", select_value);
 
 
 		//odom and PID tuning dialouge
@@ -223,71 +233,10 @@ void opcontrol() {
 		}
 						 
 		// controller profiles
-		if (select_value <= 1) {
-			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);
-			select_type = "Alec";
-			//button controls
-			if (master.get_digital(DIGITAL_R1)){
-				intake_movef = true;
-			}
-			else if (master.get_digital(DIGITAL_L1))
-			{
-				intake_moveb = true;
-			}
-			else {
-				intake_movef = false;
-				intake_moveb = false;
-			}
-			if (master.get_digital(DIGITAL_R2)) {
-				cata_shoot = true;
-			}
-			else {
-				cata_shoot = false;
-			}
-			if (master.get_digital(DIGITAL_L2)) {
-				wing_t = true;
-			}
-			else {
-				wing_t = false;
-			}
 
-		}
-
-		else if (1 <= select_value <=2) {
-			arms::chassis::arcade(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_LEFT_X) * (double)100 /127);
-			select_type = "drew";
-
-			//button controls
-			if (master.get_digital(DIGITAL_R1)){
-				intake_movef = true;
-			}
-			else if (master.get_digital(DIGITAL_R2))
-			{
-				intake_moveb = true;
-			}
-			else {
-				intake_movef = false;
-				intake_moveb = false;
-			}
-			if (master.get_digital(DIGITAL_L1)) {
-				cata_shoot = true;
-			}
-			else {
-				cata_shoot = false;
-			}
-			if (master.get_digital(DIGITAL_L2)) {
-				wing_t = true;
-			}
-			else {
-				wing_t = false;
-			}
-
-
-		}
-
-		else if (select_value >= 2) {
+		switch (select_value)
+		{
+		case 0:
 			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
 		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
 			select_type = "parker";
@@ -316,7 +265,73 @@ void opcontrol() {
 			else {
 				wing_t = false;
 			}
+		break;
+
+		case 1:
+			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
+								master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);	
+
+			select_type = "Alec";
+
+			//button controls 
+			if (master.get_digital(DIGITAL_R1)){
+				intake_movef = true;
+			}
+			else if (master.get_digital(DIGITAL_L1))
+			{
+				intake_moveb = true;
+			}
+			else {
+				intake_movef = false;
+				intake_moveb = false;
+			}
+			if (master.get_digital(DIGITAL_R2)) {
+				cata_shoot = true;
+			}
+			else {
+				cata_shoot = false;
+			}
+			if (master.get_digital(DIGITAL_L2)) {
+				wing_t = true;
+			}
+			else {
+				wing_t = false;
+			}
+		break;
+
+		case 2:
+			arms::chassis::arcade(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
+		                      master.get_analog(ANALOG_LEFT_X) * (double)100 /127);
+			select_type = "drew";
+
+			//button controls
+			if (master.get_digital(DIGITAL_R1)){
+				intake_movef = true;
+			}
+			else if (master.get_digital(DIGITAL_R2))
+			{
+				intake_moveb = true;
+			}
+			else {
+				intake_movef = false;
+				intake_moveb = false;
+			}
+			if (master.get_digital(DIGITAL_L1)) {
+				cata_shoot = true;
+			}
+			else {
+				cata_shoot = false;
+			}
+			if (master.get_digital(DIGITAL_L2)) {
+				wing_t = true;
+			}
+			else {
+				wing_t = false;
+			}
+		break;
+		
 		}
+
 
 		//intake controls
 		if (intake_movef) {
@@ -332,7 +347,7 @@ void opcontrol() {
 		}
 		
 		//cata controls
-		if ( 29700 > CataAngle && cata_shoot)
+		if ( 29700 > CataAngle && (cata_shoot== 1))
 		{
 			Cata.move(127);
 			intake.move_relative(1000,100);

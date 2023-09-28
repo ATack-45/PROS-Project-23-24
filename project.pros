@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "PROS v2",
+    "project_name": "PROS_EXP2",
     "target": "v5",
     "templates": {
       "ARMS": {
@@ -333,7 +333,7 @@
     },
     "upload_options": {
       "icon": "pros",
-      "slot": 3
+      "slot": 1
     }
   }
 }

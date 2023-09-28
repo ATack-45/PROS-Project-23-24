@@ -24,12 +24,15 @@ namespace arms {
 
 // Sensors
 #define IMU_PORT     17  // Port 17 for disabled
+
 #ifdef USING_TRACKER_WHEEL 
 	#define ENCODER_PORTS 0, 0, 1
 #else
 	#define ENCODER_PORTS 0, 0, 0
+	
 #endif
 
+#define ENCODER_PORTS 0,0,0
 #define EXPANDER_PORT 0          // Port 0 for disabled
 #define ENCODER_TYPE arms::odom::ENCODER_ROTATION 	// The type of encoders
 
@@ -51,9 +54,9 @@ namespace arms {
 #define LEAD_PCT .6			 // Go-to-pose lead distance ratio (0-1)
 
 // Auton selector configuration constants
-#define AUTONS "close", "Far", "skills", "nothing" // Names of autonomi, up to 10
+#define AUTONS "close", "Far", "nothing" // Names of autonomi, up to 10 -- nothing is 3, skills is 0
 #define HUE 0     // Color of theme from 0-359(H part of HSV)
-#define DEFAULT 4 // Default auton selected
+#define DEFAULT 3 // Default auton selected
 
 // Initializer
 inline void init() {
