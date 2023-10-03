@@ -128,11 +128,13 @@ if (auto_v >= 5) {
 	switch (arms::selector::auton)
 	{
 	case 3:
-		/*  do nothing code */
+		T_wheel.set_value(true); //setting tracker wheel up
+		nothing();
 		break;
 	
 	case 0:
-		//skills
+		T_wheel.set_value(false); //setting tracker wheel down
+		skills();
 		break;
 	}
 }
@@ -140,14 +142,17 @@ else {
 	switch (auto_v)
 	{
 	case 0: // 4 on wheel
-		/* nothing code */
+		T_wheel.set_value(true); //setting tracker wheel up
+		nothing();
 		break;
 
 	case 1: // 3 on wheel
-		/* far side */
+		T_wheel.set_value(true); //setting tracker wheel up
+		far();
 		break;
 	
 	case 3: // 2 on wheel
+		T_wheel.set_value(true); //setting tracker wheel up
 		Close();
 		break;
 	}
@@ -188,7 +193,7 @@ void opcontrol() {
 	arms::init();
 	arms::selector::destroy();
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_INVALID);
 	
 	while (true) {
 		/* creating and setting variables*/
@@ -206,7 +211,7 @@ void opcontrol() {
 		cata_track.reset_position();
 		
 		
-
+		
 
 
 		
@@ -222,15 +227,20 @@ void opcontrol() {
 		pros::lcd::set_text(4, "Right: " + std::to_string(arms::odom::getRightEncoder()));
 		pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
 		pros::lcd::print(6, "Cata Angle:%d", CataAngle);
-		pros::lcd::print(7, "drive-select:%d", select_value);
+		pros::lcd::print(7, "drive-select:%d", select_type);
 
 
 		//odom and PID tuning dialouge
 		if (master.get_digital_new_press(DIGITAL_A)) {
-		arms::odom::reset({0, 0}, 0);
-		arms::chassis::turn(90, arms::ASYNC);
-		pros::delay(3000);
+			arms::odom::reset({0, 0}, 0);
+			arms::chassis::move({25, 15, 90},50);
+			//arms::chassis::turn(90);
+			/*arms::chassis::turn(-90);
+			arms::chassis::move({0, 0, 180},45);
+			arms::chassis::turn(30);*/
 		}
+
+
 						 
 		// controller profiles
 
@@ -300,8 +310,8 @@ void opcontrol() {
 		break;
 
 		case 2:
-			arms::chassis::arcade(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_LEFT_X) * (double)100 /127);
+			arms::chassis::arcade(master.get_analog(ANALOG_RIGHT_X) * (double)100 / 127,
+		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
 			select_type = "drew";
 
 			//button controls
@@ -323,10 +333,10 @@ void opcontrol() {
 				cata_shoot = false;
 			}
 			if (master.get_digital(DIGITAL_L2)) {
-				wing_t = true;
+				wings.set_value (true);
 			}
 			else {
-				wing_t = false;
+				wings.set_value (false);
 			}
 		break;
 		
@@ -377,4 +387,3 @@ void opcontrol() {
 		pros::delay(20);
 	}
 }
-

@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "PROS_EXP2",
+    "project_name": "PROS_V3",
     "target": "v5",
     "templates": {
       "ARMS": {
