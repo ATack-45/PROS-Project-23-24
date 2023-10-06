@@ -35,16 +35,16 @@ namespace arms {
 #define ENCODER_TYPE arms::odom::EncoderType::ENCODER_ROTATION 	// The type of encoders
 
 // Movement tuning
-#define SLEW_STEP 8      // Smaller number = more slew - slew = slow increase in speed
+#define SLEW_STEP 6      // Smaller number = more slew - slew = slow increase in speed
 #define LINEAR_EXIT_ERROR 1 // default exit distance for linear movements
 #define ANGULAR_EXIT_ERROR 1 // default exit distance for angular movement	
 #define SETTLE_THRESH_LINEAR 1     // amount of linear movement for settling
 #define SETTLE_THRESH_ANGULAR 1      // amount of angular movement for settling
-#define SETTLE_TIME 250     // amount of time to count as settled
+#define SETTLE_TIME 200   // amount of time to count as settled
 #define LINEAR_KP 12
 #define LINEAR_KI .025
 #define LINEAR_KD 50
-#define TRACKING_KP 60 // point tracking turning strength
+#define TRACKING_KP 64 // point tracking turning strength
 #define ANGULAR_KP 3.25
 #define ANGULAR_KI .0
 #define ANGULAR_KD 18

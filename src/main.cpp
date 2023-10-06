@@ -209,11 +209,9 @@ void opcontrol() {
 		select_value = floor(drive_select.get_value() / 1400);
 		cata_track.set_data_rate(5);
 		cata_track.reset_position();
+		int auto_v; 
+		auto_v = floor(auto_select.get_value() /750);
 		
-		
-		
-
-
 		
 
 		/*screen printing dialouge*/
@@ -227,17 +225,13 @@ void opcontrol() {
 		pros::lcd::set_text(4, "Right: " + std::to_string(arms::odom::getRightEncoder()));
 		pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
 		pros::lcd::print(6, "Cata Angle:%d", CataAngle);
-		pros::lcd::print(7, "drive-select:%d", select_type);
+		pros::lcd::print(7, "drive-select:%d", select_value);
 
 
 		//odom and PID tuning dialouge
 		if (master.get_digital_new_press(DIGITAL_A)) {
-			arms::odom::reset({0, 0}, 0);
-			arms::chassis::move({25, 15, 90},50);
-			//arms::chassis::turn(90);
-			/*arms::chassis::turn(-90);
-			arms::chassis::move({0, 0, 180},45);
-			arms::chassis::turn(30);*/
+			far();
+			pros::delay(15000);
 		}
 
 
