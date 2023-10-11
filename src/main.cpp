@@ -34,14 +34,26 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	int auto_v; 
+	auto_v = auto_select.get_angle() / 62.5;
+	auto_v = floor(auto_v);
+	if (auto_v >= 5) {
+		switch (arms::selector::auton)
+		{
+		case 3:
+			T_wheel.set_value(true); //setting tracker wheel up
+			nothing();
+		case 0:
+			T_wheel.set_value(false); //setting tracker wheel down
+			skills();
+			#define USING_TRACKER_WHEEL
+		
+		}
+	}
 	arms::init();
 	pros::lcd::initialize();
 	//arms::selector::init;
 	pros::lcd::register_btn1_cb(on_center_button);
-	
-	int auto_v; 
-	auto_v = auto_select.get_angle() / 62.5;
-	auto_v = floor(auto_v);
 	
 }
 
@@ -128,33 +140,34 @@ if (auto_v >= 5) {
 	switch (arms::selector::auton)
 	{
 	case 3:
-		T_wheel.set_value(true); //setting tracker wheel up
+		T_wheel.set_value(false); //setting tracker wheel up
 		nothing();
-		break;
+	
 	
 	case 0:
-		T_wheel.set_value(false); //setting tracker wheel down
+		T_wheel.set_value(true); //setting tracker wheel down
 		skills();
-		break;
+	
 	}
 }
 else {
 	switch (auto_v)
 	{
 	case 0: // 4 on wheel
-		T_wheel.set_value(true); //setting tracker wheel up
+		T_wheel.set_value(false); //setting tracker wheel up
 		nothing();
-		break;
+		
 
 	case 1: // 3 on wheel
-		T_wheel.set_value(true); //setting tracker wheel up
+		T_wheel.set_value(false); //setting tracker wheel up
 		far();
 		break;
 	
 	case 3: // 2 on wheel
-		T_wheel.set_value(true); //setting tracker wheel up
+		T_wheel.set_value(false); //setting tracker wheel up
 		Close();
 		break;
+		
 	}
 }
 /*switch returns value of () and uses appropiate case, more efficent than if, elif because it only checks once */
@@ -229,11 +242,12 @@ void opcontrol() {
 
 
 		//odom and PID tuning dialouge
+		/*
 		if (master.get_digital_new_press(DIGITAL_A)) {
 			far();
 			pros::delay(15000);
 		}
-
+*/
 
 						 
 		// controller profiles
@@ -304,8 +318,8 @@ void opcontrol() {
 		break;
 
 		case 2:
-			arms::chassis::arcade(master.get_analog(ANALOG_RIGHT_X) * (double)100 / 127,
-		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
+			arms::chassis::arcade(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
+								master.get_analog(ANALOG_RIGHT_X) * (double)100 /127);
 			select_type = "drew";
 
 			//button controls
@@ -351,7 +365,7 @@ void opcontrol() {
 		}
 		
 		//cata controls
-		if ( 29700 > CataAngle && (cata_shoot== 1))
+		if ( 30000 > CataAngle && (cata_shoot== 1))
 		{
 			Cata.move(127);
 			intake.move_relative(1000,100);
@@ -359,7 +373,7 @@ void opcontrol() {
 			CataAngle = cata_track.get_angle();
 		}
 		
-		 else if ( 29700 > CataAngle )
+		 else if ( 30000 > CataAngle )
 		{
 			Cata.brake();
 			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);

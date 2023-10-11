@@ -23,12 +23,12 @@ namespace arms {
 #define MIDDLE_DISTANCE 2.5	// Distance from middle wheel to the robot turning center
 
 // Sensors
-#define IMU_PORT     17 // Port 17, 0 for disabled
+#define IMU_PORT     10 // Port 17, 0 for disabled
 
 #ifdef USING_TRACKER_WHEEL 
 	#define ENCODER_PORTS 0, 0, 10
 #else
-	#define ENCODER_PORTS 0, 0, 10
+	#define ENCODER_PORTS 0, 0, 0
 	
 #endif
 #define EXPANDER_PORT 0          // Port 0 for disabled
@@ -40,13 +40,13 @@ namespace arms {
 #define ANGULAR_EXIT_ERROR 1 // default exit distance for angular movement	
 #define SETTLE_THRESH_LINEAR 1     // amount of linear movement for settling
 #define SETTLE_THRESH_ANGULAR 1      // amount of angular movement for settling
-#define SETTLE_TIME 200   // amount of time to count as settled
+#define SETTLE_TIME 250   // amount of time to count as settled
 #define LINEAR_KP 12
 #define LINEAR_KI .025
 #define LINEAR_KD 50
 #define TRACKING_KP 64 // point tracking turning strength
-#define ANGULAR_KP 3.25
-#define ANGULAR_KI .0
+#define ANGULAR_KP 3.0
+#define ANGULAR_KI .003
 #define ANGULAR_KD 18
 #define MIN_ERROR 3      // Minimum distance to target before angular componenet is disabled
 #define LEAD_PCT .675 // Go-to-pose lead distance ratio (0-1)
