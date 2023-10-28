@@ -39,11 +39,11 @@ void far() {
 	pros::delay(400);
 	arms::chassis::move(-10, arms::REVERSE);
 	intake.move(0);
-	arms::chassis::turn(260,50); // orient towards 3rd triball
+	arms::chassis::turn(265,50); // orient towards 3rd triball
 	intake.move(127);
 	arms::chassis::move(14, 75); // move to 3rd triball
 	pros::delay(150);
-	arms::chassis::turn(80,50); // orient towards goal
+	arms::chassis::turn(90,50); // orient towards goal
 	arms::chassis::move(25, 90, arms::ASYNC); // score 3rd triball
 	intake.move(-127);
 	pros::delay(1200);
