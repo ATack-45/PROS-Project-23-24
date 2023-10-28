@@ -256,11 +256,11 @@ void opcontrol() {
 		{
 		case 0:
 			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
-		                      master.get_analog(ANALOG_LEFT_Y) * (double)100 /127);
+		                      (master.get_analog(ANALOG_LEFT_Y) * master.get_analog(ANALOG_LEFT_Y)) / 10);
 			select_type = "parker";
 
 			//button controls
-			if (master.get_digital(DIGITAL_R1)){
+			if (master.get_digital(DIGITAL_R2)){
 				intake_movef = true;
 			}
 			else if (master.get_digital(DIGITAL_L2))
@@ -271,7 +271,7 @@ void opcontrol() {
 				intake_movef = false;
 				intake_moveb = false;
 			}
-			if (master.get_digital(DIGITAL_R2)) {
+			if (master.get_digital(DIGITAL_R1)) {
 				cata_shoot = true;
 			}
 			else {
@@ -342,6 +342,7 @@ void opcontrol() {
 			}
 			if (master.get_digital(DIGITAL_L2)) {
 				wings.set_value (true);
+				intake.move(-100);
 			}
 			else {
 				wings.set_value (false);

@@ -33,39 +33,27 @@ void far() {
 	pros::delay(1200);
 	intake.move(100);
 	pros::delay(100);
-	arms::chassis::turn(90,75);// orient towards goal
+	arms::chassis::turn(85,75);// orient towards goal
 	intake.move(-127);
-	arms::chassis::move(10, 75, arms::THRU); // score 2nd triball
+	arms::chassis::move(11, 75, arms::THRU); // score 2nd triball
 	pros::delay(400);
-	arms::chassis::move(-10, arms::REVERSE);
+	arms::chassis::move(-11, arms::REVERSE);
 	intake.move(0);
-	arms::chassis::turn(265,50); // orient towards 3rd triball
+	arms::chassis::turn(255,50); // orient towards 3rd triball
 	intake.move(127);
 	arms::chassis::move(14, 75); // move to 3rd triball
 	pros::delay(150);
-	arms::chassis::turn(90,50); // orient towards goal
+	arms::chassis::turn(82,50); // orient towards goal
 	arms::chassis::move(25, 90, arms::ASYNC); // score 3rd triball
 	intake.move(-127);
 	pros::delay(1200);
 	arms::chassis::move(-3, arms::REVERSE);
-	/*
-	arms::chassis::turn(-90,75, arms::RELATIVE);
-	arms::chassis::move(55,75);
-	arms::chassis::turn(265,75);
-	arms::chassis::move(15,75);
-	pros::delay(2000);
-	arms::chassis::settled();
-	*/
-	
-
-
-	
-	
-
-	
-
-
-
+	intake.move(0);
+	arms::chassis::move(-12, arms::REVERSE);
+	arms::chassis::turn(-190,60, arms::RELATIVE);
+	arms::chassis::move(-20, arms::REVERSE);// ram triballs in
+	arms::chassis::move(8, 75);
+	arms::chassis::turn(90,50, arms::RELATIVE); // orient towards goal
 	
 
 }
