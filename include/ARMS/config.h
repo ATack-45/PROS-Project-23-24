@@ -8,15 +8,6 @@
 namespace arms {
 
 // Debug
-#ifndef _ARMS_CONFIG_H_
-#define _ARMS_CONFIG_H_
-
-#include "ARMS/api.h"
-
-
-namespace arms {
-
-// Debug
 #define ODOM_DEBUG 1
 
 // Negative numbers mean reversed motor
@@ -77,7 +68,7 @@ inline void init() {
 
 }
 
-} // namespace arms
+}// namespace arms
 
 #endif
 

@@ -255,8 +255,8 @@ void opcontrol() {
 		switch (select_value)
 		{
 		case 0:
-			arms::chassis::tank(master.get_analog(ANALOG_LEFT_Y) * (double)100 / 127,
-		                      (master.get_analog(ANALOG_LEFT_X) * master.get_analog(ANALOG_LEFT_X)) / 10);
+			arms::chassis::tank(master.get_analog(ANALOG_RIGHT_Y) * (double)100 / 127,
+		                      (master.get_analog(ANALOG_LEFT_Y) * master.get_analog(ANALOG_LEFT_Y)) / 10);
 			select_type = "parker";
 
 			//button controls
