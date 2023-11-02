@@ -367,7 +367,7 @@ void opcontrol() {
 		}
 		
 		//cata controls
-		if ( 30000 > CataAngle && (cata_shoot== 1))
+		if ( 31450 > CataAngle && (cata_shoot== 1))
 		{
 			Cata.move(127);
 			intake.move_relative(1000,100);
@@ -375,14 +375,14 @@ void opcontrol() {
 			CataAngle = cata_track.get_angle();
 		}
 		
-		 else if ( 30000 > CataAngle )
+		 else if ( 31450 > CataAngle )
 		{
 			Cata.brake();
 			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
 			pros::delay(5);
 			CataAngle = cata_track.get_angle();
 		}
-		else if ( CataAngle > 29800 )
+		else if ( CataAngle > 31500 )
 		{
 			Cata.move(127);
 			pros::delay(5);
