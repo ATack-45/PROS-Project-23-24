@@ -141,13 +141,13 @@ void autonomous() {
 if (auto_v >= 5) {
 	switch (arms::selector::auton)
 	{
-	case 3:
-		T_wheel.set_value(false); //setting tracker wheel up
+	case 0:
+		 //setting tracker wheel up
 		nothing();
 	
 	
-	case 0:
-		T_wheel.set_value(true); //setting tracker wheel down
+	case 3:
+		 //setting tracker wheel down
 		skills();
 	
 	}
@@ -156,17 +156,17 @@ else {
 	switch (auto_v)
 	{
 	case 0: // 4 on wheel
-		T_wheel.set_value(false); //setting tracker wheel up
+		 //setting tracker wheel up
 		nothing();
 		
 
 	case 1: // 3 on wheel
-		T_wheel.set_value(false); //setting tracker wheel up
+		//setting tracker wheel up
 		far();
 		break;
 	
 	case 3: // 2 on wheel
-		T_wheel.set_value(false); //setting tracker wheel up
+		 //setting tracker wheel up
 		Close();
 		break;
 		
@@ -204,30 +204,34 @@ bool wing_state;
 		}
 	}
 
+
+
 void opcontrol() {
-	arms::init();
-	arms::selector::destroy();
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_INVALID);
+	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+	int CataAngle;
+	int select_value; 
+	bool intake_movef;
+	bool intake_moveb;
+	bool cata_shoot;
+	bool wing_t;
+	bool wing_state;
+	std::string select_type;
+	CataAngle = cata_track.get_angle();
+	bool safety = false;
+	bool cata_down = false;
 	
+	cata_track.set_data_rate(5);
+	cata_track.reset_position();
+	
+	int cata_Pull_Angle = 32291;
+	int cata_Move_Angle = cata_Pull_Angle - 00050;
 	while (true) {
 		/* creating and setting variables*/
-		int CataAngle;
-		int select_value; 
-		bool intake_movef;
-		bool intake_moveb;
-		bool cata_shoot;
-		bool wing_t;
-		bool wing_state;
-		std::string select_type;
-		CataAngle = cata_track.get_angle();
-		select_value = floor(drive_select.get_value() / 1400);
-		cata_track.set_data_rate(5);
-		cata_track.reset_position();
 		int auto_v; 
 		auto_v = floor(auto_select.get_value() /750);
-		
-		
+		select_value = floor( drive_select.get_value() / 1400) ;
+
 
 		/*screen printing dialouge*/
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
@@ -241,15 +245,17 @@ void opcontrol() {
 		pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
 		pros::lcd::print(6, "Cata Angle:%d", CataAngle);
 		pros::lcd::print(7, "drive-select:%d", select_value);
+		master.print(0, 0, "safety: %d", auto_v);
 
 
 		//odom and PID tuning dialouge
 		/*
 		if (master.get_digital_new_press(DIGITAL_A)) {
-			far();
-			pros::delay(15000);
+			arms::odom::reset({0, 0}, 0);
+			arms::chassis::move(24, arms::ASYNC);
+			pros::delay(3000);
 		}
-*/
+		*/
 
 						 
 		// controller profiles
@@ -367,26 +373,28 @@ void opcontrol() {
 		}
 		
 		//cata controls
-		if ( 31450 > CataAngle && (cata_shoot== 1))
+		if ( 32291 > CataAngle && (cata_shoot== 1))
 		{
-			Cata.move(127);
+			Cata.move_voltage(11000);
 			intake.move_relative(1000,100);
 			pros::delay(250);
 			CataAngle = cata_track.get_angle();
 		}
 		
-		 else if ( 31450 > CataAngle )
+		 else if ( 32291 > CataAngle )
 		{
 			Cata.brake();
 			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
 			pros::delay(5);
 			CataAngle = cata_track.get_angle();
+			cata_down = true;
 		}
-		else if ( CataAngle > 31500 )
+		else if ( CataAngle > 32291 )
 		{
-			Cata.move(127);
+			Cata.move_voltage(11000);
 			pros::delay(5);
 			CataAngle = cata_track.get_angle();
+			cata_down = false;
 		}
 
 		//wings control
@@ -394,6 +402,44 @@ void opcontrol() {
 			wing_toggle();
 		}
 		
+		//blocker controls 
+		if (master.get_digital(DIGITAL_Y)) {
+			blocka.set_value(true);
+		}
+		else if (master.get_digital(DIGITAL_B)) {
+			blocka.set_value(false);
+		}
+
+
+		/* (master.get_digital(DIGITAL_DOWN)) {
+			hang.set_value(false);
+		}*/
+
+	
+		
+
+		//safety trigger
+		if (master.get_digital(DIGITAL_RIGHT)) {
+			pros::delay(100);
+			if (safety) {
+			safety = false;
+			}
+			else {
+			safety = true;
+			}
+		}
+
+		//auto shoot 
+		
+		if (ball_sensor.get() <= 10 && safety && cata_down ) {
+			pros::delay(100);
+			Cata.move(100);
+			pros::delay(100);
+		}
+		//catch if cata over rotates
+		if (CataAngle < 2) {
+			Cata.move(100);
+		}
 		pros::delay(20);
 	}
 }

@@ -10,27 +10,21 @@ namespace arms {
 #define ODOM_DEBUG 1
 
 // Negative numbers mean reversed motor
-#define LEFT_MOTORS -11,-12,13
-#define RIGHT_MOTORS 20, 19,-18
+#define LEFT_MOTORS -10,-9,8
+#define RIGHT_MOTORS 1, 2,-3
 #define GEARSET pros::E_MOTOR_GEAR_600 // RPM of chassis motors
 
 // Ticks per inch
-#define TPI   	49.01// Encoder ticks per inch of forward robot movement
-#define MIDDLE_TPI  3358.6688 // 3300.6998Ticks per inch for the middle wheel
+#define TPI   	48.604686828155517578125// Encoder ticks per inch of forward robot movement
+#define MIDDLE_TPI  4206.030296875// 3300.6998Ticks per inch for the middle wheel
 
 // Tracking wheel distances
-#define TRACK_WIDTH   12.53501032541676// The distance between left and right wheels (or tracker wheels)
-#define MIDDLE_DISTANCE 2.5	// Distance from middle wheel to the robot turning center
+#define TRACK_WIDTH   13// The distance between left and right wheels (or tracker wheels)
+#define MIDDLE_DISTANCE 3.75 // Distance from middle wheel to the robot turning center
 
 // Sensors
-#define IMU_PORT     10 // Port 17, 0 for disabled
-
-#ifdef USING_TRACKER_WHEEL 
-	#define ENCODER_PORTS 0, 0, 10
-#else
-	#define ENCODER_PORTS 0, 0, 0
-	
-#endif
+#define IMU_PORT     20 // Port 20, 0 for disabled
+#define ENCODER_PORTS 0, 0, 6
 #define EXPANDER_PORT 0          // Port 0 for disabled
 #define ENCODER_TYPE arms::odom::EncoderType::ENCODER_ROTATION 	// The type of encoders
 
@@ -46,8 +40,8 @@ namespace arms {
 #define LINEAR_KD 50
 #define TRACKING_KP 64 // point tracking turning strength
 #define ANGULAR_KP 3.0
-#define ANGULAR_KI .003
-#define ANGULAR_KD 18
+#define ANGULAR_KI .135
+#define ANGULAR_KD 19.25
 #define MIN_ERROR 3      // Minimum distance to target before angular componenet is disabled
 #define LEAD_PCT .675 // Go-to-pose lead distance ratio (0-1)
 

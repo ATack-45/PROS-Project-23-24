@@ -12,9 +12,39 @@ void Close() {
 	pros::lcd::print(2, "Close side auto");
 
 	//actual code
-	arms::chassis::turn(35);
-	arms::chassis::move(-36, arms::REVERSE);// push alliance in
-	arms::chassis::move(10, 75);// use odometry here incase hitting goal knocks us at a weird angle
+	Cata.move_relative(100,100);
+	arms::chassis::move({44,0});
+	arms::chassis::turn(255);
+	wings.set_value(true);
+	intake.move(-100);
+	arms::chassis::move(26);
+	arms::chassis::move(-12, arms::REVERSE);
+	intake.move(0);
+	arms::chassis::turn(140,75);
+	wings.set_value(false);
+	arms::chassis::move(45.25);
+	arms::chassis::turn(-332,75);
+	arms::chassis::move(10);
+	arms::chassis::turn(-340);
+	wings.set_value(true);
+	pros::delay(250);
+	arms::chassis::move(-15, arms::REVERSE);
+	arms::chassis::turn(-311);
+	wings.set_value(false);
+	pros::delay(250);
+	arms::chassis::move(-5, arms::REVERSE);
+	arms::chassis::turn(250);
+	arms::chassis::move(13);
+	intake.move(-100);
+	arms::chassis::turn(270);
+	arms::chassis::move(6);
+	
+
+	
+	
+
+
+	
 }
 void far() {
 	//init stuff
@@ -25,37 +55,13 @@ void far() {
 	pros::lcd::print(2, "far side auto");
 
 	//actual code
-	arms::chassis::turn(-35);
-	arms::chassis::move(-36, arms::REVERSE);// push alliance in
-	arms::chassis::move({-15,0}, 75);// use odometry here incase hitting goal knocks us at a weird angle
-	arms::chassis::turn(-175,60);//orient towards 2nd triball
-	arms::chassis::move(50, 75, arms::ASYNC);//move to second triball
-	pros::delay(1200);
+	Cata.move_relative(500,100);
+	intake.move(-100);
+	arms::chassis::turn(30);
+	arms::chassis::move(45);
 	intake.move(100);
-	pros::delay(100);
-	arms::chassis::turn(90,75);// orient towards goal
-	intake.move(-127);
-	arms::chassis::move(10, 75, arms::THRU); // score 2nd triball
-	pros::delay(400);
-	arms::chassis::move(-10, arms::REVERSE);
-	intake.move(0);
-	arms::chassis::turn(260,50); // orient towards 3rd triball
-	intake.move(127);
-	arms::chassis::move(14, 75); // move to 3rd triball
-	pros::delay(150);
-	arms::chassis::turn(80,50); // orient towards goal
-	arms::chassis::move(25, 90, arms::ASYNC); // score 3rd triball
-	intake.move(-127);
-	pros::delay(1200);
-	arms::chassis::move(-3, arms::REVERSE);
-	/*
-	arms::chassis::turn(-90,75, arms::RELATIVE);
-	arms::chassis::move(55,75);
-	arms::chassis::turn(265,75);
-	arms::chassis::move(15,75);
-	pros::delay(2000);
-	arms::chassis::settled();
-	*/
+
+
 	
 
 
