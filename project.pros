@@ -1,7 +1,7 @@
 {
     "py/object": "pros.conductor.project.Project",
     "py/state": {
-        "project_name": "Lemlib-project",
+        "project_name": "PROS-Project",
         "target": "v5",
         "templates": {
             "kernel": {

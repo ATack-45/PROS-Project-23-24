@@ -75,11 +75,7 @@ bin/main.cpp.o: src/main.cpp include/main.h include/api.h \
  include/pros/optical.hpp include/pros/optical.h \
  include/pros/rotation.hpp include/pros/rotation.h include/pros/rtos.hpp \
  include/pros/screen.hpp include/pros/screen.h include/pros/vision.hpp \
- include/pros/vision.h include/pros/link.hpp include/pros/link.h \
- include/ARMS/api.h include/ARMS/chassis.h include/ARMS/flags.h \
- include/ARMS/point.h include/ARMS/../api.h include/ARMS/odom.h \
- include/ARMS/pid.h include/ARMS/selector.h include/Region-config.h \
- include/main.h include/ARMS/config.h include/pros/adi.hpp
+ include/pros/vision.h include/pros/link.hpp include/pros/link.h
 include/main.h:
 include/api.h:
 include/pros/adi.h:
@@ -233,15 +229,3 @@ include/pros/vision.hpp:
 include/pros/vision.h:
 include/pros/link.hpp:
 include/pros/link.h:
-include/ARMS/api.h:
-include/ARMS/chassis.h:
-include/ARMS/flags.h:
-include/ARMS/point.h:
-include/ARMS/../api.h:
-include/ARMS/odom.h:
-include/ARMS/pid.h:
-include/ARMS/selector.h:
-include/Region-config.h:
-include/main.h:
-include/ARMS/config.h:
-include/pros/adi.hpp:
