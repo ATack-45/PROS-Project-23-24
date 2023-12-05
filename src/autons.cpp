@@ -12,21 +12,18 @@ void Close() {
 	pros::lcd::print(2, "Close side auto");
 
 	//actual code
-	Cata.move_relative(100,100);
-	arms::chassis::turn(60,75);
-	arms::chassis::move(10);
+	Cata.move_relative(200,100);
 	wings.set_value(true);
-	pros::delay(250);
-	arms::chassis::move(-15, arms::REVERSE);
+	pros::delay(300);
+	arms::chassis::turn(90);
 	wings.set_value(false);
-	arms::chassis::turn(160);
 	pros::delay(250);
 	arms::chassis::turn(270);
-	arms::chassis::move(5);
-	intake.move(-100);
+	arms::chassis::move(28);
 	arms::chassis::turn(300);
-	arms::chassis::move(20);
-	arms::chassis::turn(340);
+	intake.move(-100);
+	pros::delay(500);
+	intake.move(0);
 
 	
 
@@ -45,12 +42,38 @@ void far() {
 	auto_v = floor(auto_select.get_value() /750);
 	pros::lcd::print(1, "Pot auto:%d", auto_v);
 	pros::lcd::print(2, "far side auto");
+	arms::odom::imu.reset();
 
 	//actual code
+	Cata.move_relative(500,100);
+	arms::chassis::move(43);
+	arms::chassis::turn(270);
+	intake.move(-100);
+	arms::chassis::move(5);
+	intake.move(0);
+	arms::chassis::move(-30,75,  arms::REVERSE);
+	wings.set_value(true);
+	pros::delay(600);
+	arms::chassis::move(32);
+	pros::delay(250);
+	arms::chassis::move(-20,75,  arms::REVERSE);
+	wings.set_value(false);
+	arms::chassis::turn(50);
+	intake.move(100);
+	arms::chassis::move(10,33);
+	arms::chassis::move(-8,33,arms::REVERSE);
+	arms::chassis::turn(270);
+	intake.move(-100);
+	wings.set_value(true);
+	arms::chassis::move(20);
+	arms::chassis::move(-15,arms::REVERSE);
+	arms::chassis::move(15);
+	arms::chassis::move(-15,arms::REVERSE);
+	wings.set_value(false);
+	intake.move(0);
+
+
 	
-	arms::chassis::turn(315);
-	arms::chassis::move(-35, arms::REVERSE);
-	arms::chassis::move(10);
 	
 
 

@@ -54,6 +54,8 @@ void initialize() {
 	pros::lcd::initialize();
 	//arms::selector::init;
 	pros::lcd::register_btn1_cb(on_center_button);
+	hang.set_value(false);
+
 	
 }
 
@@ -64,6 +66,7 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 void disabled() {
+	
 }
 
 /**
@@ -438,6 +441,12 @@ void opcontrol() {
 		//catch if cata over rotates
 		if (CataAngle < 2) {
 			Cata.move(100);
+		}
+		if (master.get_digital(DIGITAL_A))
+		{
+			hang.set_value(true);
+			
+			
 		}
 		pros::delay(20);
 	}
