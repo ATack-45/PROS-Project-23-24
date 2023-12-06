@@ -5,13 +5,13 @@
 
 extern pros::Motor intake;
 extern pros::Motor Cata;
-extern pros::ADIDigitalOut wings;
+extern pros::adi::DigitalOut wings;
 extern pros::Rotation cata_track;
-extern pros::ADIPotentiometer drive_select;
-extern pros::ADIPotentiometer auto_select;
+extern pros::adi::Potentiometer drive_select;
+extern pros::adi::Potentiometer auto_select;
 extern pros::Rotation T_wheel;
-extern pros::ADIDigitalOut blocka;
-extern pros::ADIDigitalOut hang;
+extern pros::adi::DigitalOut blocka;
+extern pros::adi::DigitalOut hang;
 extern pros::Distance ball_sensor;
 extern pros::IMU IMU;
 extern lemlib::Drivetrain drivetrain;

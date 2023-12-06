@@ -92,7 +92,7 @@ class TrackingWheel {
         float diameter;
         float distance;
         float rpm;
-        pros::ADIEncoder* encoder = nullptr;
+        pros::adi::Encoder* encoder = nullptr;
         pros::Rotation* rotation = nullptr;
         pros::MotorGroup* motors = nullptr;
         float gearRatio = 1;

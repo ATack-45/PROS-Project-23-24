@@ -14,13 +14,13 @@ pros::Motor rB(-3, pros::v5::MotorGears::blue); // port 1, blue gearbox,  revers
 
 pros::Motor intake(5);
 pros::Motor Cata(-4);
-pros::ADIDigitalOut wings(1);
+pros::adi::DigitalOut wings(1);
 pros::Rotation cata_track (7);
-pros::ADIPotentiometer drive_select(3);
-pros::ADIPotentiometer auto_select (4);
+pros::adi::Potentiometer drive_select(3);
+pros::adi::Potentiometer auto_select (4);
 pros::Rotation T_wheel(6);
-pros::ADIDigitalOut blocka(5);
-pros::ADIDigitalOut hang(6);
+pros::adi::DigitalOut blocka(5);
+pros::adi::DigitalOut hang(6);
 pros::Distance ball_sensor(19);
 pros::Imu IMU(20);
 
