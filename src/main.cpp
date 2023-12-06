@@ -1,5 +1,9 @@
 #include "main.h"
-#include "./region-config.h"
+#include "lemlib/api.hpp"
+#include "lemlib/logger/stdout.hpp"
+#include "pros/misc.h"
+#include "region-config.cpp"
+
 
 /**
  * A callback function for LLEMU's center button.
@@ -17,6 +21,7 @@ void on_center_button() {
 	}
 }
 
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -24,10 +29,30 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+    pros::lcd::initialize(); // initialize brain screen
+    chassis.calibrate(); // calibrate sensors
 
-	pros::lcd::register_btn1_cb(on_center_button);
+    // the default rate is 50. however, if you need to change the rate, you
+    // can do the following.
+    // lemlib::bufferedStdout().setRate(...);
+    // If you use bluetooth or a wired connection, you will want to have a rate of 10ms
+
+    // for more information on how the formatting for the loggers
+    // works, refer to the fmtlib docs
+
+    // thread to for brain screen and position logging
+    pros::Task screenTask([&]() {
+        lemlib::Pose pose(0, 0, 0);
+        while (true) {
+            // print robot location to the brain screen
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            // log position telemetry
+            // delay to save resources
+            pros::delay(50);
+        }
+    });
 }
 
 /**

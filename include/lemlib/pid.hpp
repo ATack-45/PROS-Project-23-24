@@ -18,7 +18,7 @@ namespace lemlib {
  *
  * The controller does not loop on its own. It must be called in a loop.
  * For example: while(!controller.settled) { controller.update(input, output); }
- *
+ *  
  */
 class FAPID {
     public:
