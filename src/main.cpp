@@ -2,7 +2,7 @@
 #include "lemlib/api.hpp"
 #include "lemlib/logger/stdout.hpp"
 #include "pros/misc.h"
-#include "region-config.cpp"
+#include "region-config.h"
 
 
 /**

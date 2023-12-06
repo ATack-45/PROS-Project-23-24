@@ -1,5 +1,4 @@
 #include "Region-config.h"
-#include "main.h"
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/pid.hpp"
 
