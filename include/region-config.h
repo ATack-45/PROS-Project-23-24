@@ -1,4 +1,6 @@
 #include "main.h"
+#include "lemlib/chassis/chassis.hpp"
+#include "lemlib/pid.hpp"
 
 
 extern pros::Motor intake;
