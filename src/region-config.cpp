@@ -31,12 +31,12 @@ pros::MotorGroup right_motors({1,2,-3}, pros::v5::MotorGears::blue, pros::v5::Mo
 //drivetrain setup
 lemlib::Drivetrain drivetrain(&left_motors, // left motor group
                               &right_motors, // right motor group
-                              10, // 10 inch track width -- need to change
+                              13, // 13 inch track width 
                               lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
                               360, // drivetrain rpm is 360
                               2 // chase power is 2. If we had traction wheels, it would have been 8
 );
-lemlib::TrackingWheel horizontal(&T_wheel, 2.75, -4.3); //need to change offset
+lemlib::TrackingWheel horizontal(&T_wheel, 2.75, -3.75); 
 
 
 //odom wheel setup
@@ -49,19 +49,19 @@ lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to nullpt
  
 // forward/backward PID
 lemlib::ControllerSettings lateralController (
-    8, // kP
-    30, // kD
+    15, // kP
+    50, // kD
     1, // smallErrorRange
     100, // smallErrorTimeout
     3, // largeErrorRange
     500, // largeErrorTimeout
-    5 // slew rate
+    5 // slew rate: Smaller number = more slew - slew = slow increase in speed
 );
  
 // turning PID
 lemlib::ControllerSettings angularController (
-    4, // kP
-    40, // kD
+    5, // kP
+    19.25, // kD
     1, // smallErrorRange
     100, // smallErrorTimeout
     3, // largeErrorRange

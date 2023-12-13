@@ -20,3 +20,8 @@ extern lemlib::OdomSensors sensors;
 extern lemlib::ControllerSettings lateralController;
 extern lemlib::ControllerSettings angularController;
 extern lemlib::Chassis chassis;
+
+void Close();
+void far();
+void skills();
+void nothing();
