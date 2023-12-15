@@ -16,24 +16,14 @@ void Close() {
 	wings.set_value(true);
 	pros::delay(300);
 	arms::chassis::turn(90);
-	wings.set_value(false);
+	
 	pros::delay(250);
+	arms::chassis::turn(330);
+	arms::chassis::move(15);
 	arms::chassis::turn(270);
-	arms::chassis::move(28);
+	arms::chassis::move(20);
 	arms::chassis::turn(300);
-	intake.move(-100);
-	pros::delay(500);
-	intake.move(0);
 
-	
-
-	
-
-	
-	
-
-
-	
 }
 void far() {
 	//init stuff
@@ -58,7 +48,7 @@ void far() {
 	pros::delay(250);
 	arms::chassis::move(-20,75,  arms::REVERSE);
 	wings.set_value(false);
-	arms::chassis::turn(50);
+	arms::chassis::turn(45);
 	intake.move(100);
 	arms::chassis::move(10,33);
 	arms::chassis::move(-8,33,arms::REVERSE);
@@ -67,6 +57,7 @@ void far() {
 	wings.set_value(true);
 	arms::chassis::move(20);
 	arms::chassis::move(-15,arms::REVERSE);
+	arms::chassis::turn(260);
 	arms::chassis::move(15);
 	arms::chassis::move(-15,arms::REVERSE);
 	wings.set_value(false);
