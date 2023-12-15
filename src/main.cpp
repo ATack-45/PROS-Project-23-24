@@ -198,9 +198,10 @@ void opcontrol() {
 
             //odom and pid manual tuning dialog
             if (master.get_digital(DIGITAL_X)){
-                chassis.setPose(40.685,-65.178,180);
-                chassis.follow(Test_txt, 10, 15000,false);
+                chassis.setPose(-51.616,-56.67,225);
+                chassis.follow(skillsAuto1_txt, 20  , 15000,false);
                 chassis.waitUntilDone();
+                
             }
 
                             

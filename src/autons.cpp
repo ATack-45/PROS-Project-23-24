@@ -4,6 +4,7 @@
 #include "Region-config.h"
 #include "pros/adi.hpp"
 
+	ASSET(Close1_txt);
 void Close() {
 	//init stuff
     pros::lcd::clear_line(1);
@@ -16,6 +17,9 @@ void Close() {
 	Cata.move_relative(200,100);
 	
 }
+
+	ASSET(Far1_txt);
+	ASSET(Far2_txt);
 void far() {
 	//init stuff
     
@@ -29,13 +33,17 @@ void far() {
 	
 
 }
+
+	ASSET(skillsAuto1_txt);
 void skills() {
    
 	int auto_v; 
 	auto_v = floor(auto_select.get_value() /750);
 	pros::lcd::print(2, "Pot auto:%d", auto_v);
 	pros::lcd::print(2, "skills auto");
-	Cata.move(100);
+	chassis.setPose(-51.616,-56.67,225);
+    chassis.follow(skillsAuto1_txt, 20  , 15000,false);
+    chassis.waitUntilDone();
 }
 void nothing() {
 	int auto_v; 

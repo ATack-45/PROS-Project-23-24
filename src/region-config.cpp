@@ -60,13 +60,13 @@ lemlib::ControllerSettings lateralController (
  
 // turning PID
 lemlib::ControllerSettings angularController (
-    5, // kP
+    3, // kP
     19.25, // kD
     1, // smallErrorRange
     100, // smallErrorTimeout
     3, // largeErrorRange
     500, // largeErrorTimeout
-    0 // slew rate
+    2 // slew rate
 );
 
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensors); 
