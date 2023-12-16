@@ -15,6 +15,8 @@ void Close() {
 
 	//actual code
 	Cata.move_relative(200,100);
+	chassis.setPose(-47.749,-54.865,25);
+	chassis.follow(Close1_txt,10,15000);
 	
 }
 
@@ -30,6 +32,8 @@ void far() {
 
 	//actual code
 	Cata.move_relative(500,100);
+	chassis.follow(Far1_txt, 10, 7000);
+	chassis.follow(Far2_txt, 10, 8000, false);
 	
 
 }
