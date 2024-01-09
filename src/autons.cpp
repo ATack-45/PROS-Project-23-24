@@ -88,7 +88,7 @@ void skills() {
 	pros::lcd::print(2, "Pot auto:%d", auto_v);
 	pros::lcd::print(2, "skills auto");
 	pros::lcd::print(1, "ARMS Error:%d", arms::odom::getDistanceError);	
-	Cata.move(100);
+	Cata.move(85);
 }
 void nothing() {
    pros::lcd::clear();

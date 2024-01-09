@@ -250,13 +250,13 @@ void opcontrol() {
 
 
 		//odom and PID tuning dialouge
-		/*
-		if (master.get_digital_new_press(DIGITAL_A)) {
-			arms::odom::reset({0, 0}, 0);
-			arms::chassis::move(24, arms::ASYNC);
-			pros::delay(3000);
+		
+		if (master.get_digital_new_press(DIGITAL_X)) {
+			Cata.move(100);
+			pros::delay(30000);
+			Cata.move(0);
 		}
-		*/
+		
 
 						 
 		// controller profiles
