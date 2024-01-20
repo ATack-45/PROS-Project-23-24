@@ -33,11 +33,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/main.cpp.o",
-            "src\\main.cpp"
+            "bin/region-config.cpp.o",
+            "src\\region-config.cpp"
         ],
         "directory": "C:\\Users\\tacki_cdxdcbs\\Documents\\PROS-Project",
-        "file": "src\\main.cpp"
+        "file": "src\\region-config.cpp"
     },
     {
         "arguments": [
@@ -73,11 +73,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/region-config.cpp.o",
-            "src\\region-config.cpp"
+            "bin/main.cpp.o",
+            "src\\main.cpp"
         ],
         "directory": "C:\\Users\\tacki_cdxdcbs\\Documents\\PROS-Project",
-        "file": "src\\region-config.cpp"
+        "file": "src\\main.cpp"
     },
     {
         "arguments": [

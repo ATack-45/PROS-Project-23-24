@@ -14,17 +14,14 @@ void Close() {
 	pros::lcd::print(2, "Close side auto");
 
 	//actual code
-	Cata.move_relative(200,100);
-	chassis.setPose(-47.749,-54.865,25);
-	chassis.follow(Close1_txt,10,15000);
-	
+	chassis.turnTo(19,-11,5);
 }
 
 	ASSET(Far1_txt);
 	ASSET(Far2_txt);
 void far() {
+	
 	//init stuff
-    
 	int auto_v; 
 	auto_v = floor(auto_select.get_value() /750);
 	pros::lcd::print(1, "Pot auto:%d", auto_v);
@@ -36,8 +33,8 @@ void far() {
 	chassis.follow(Far2_txt, 10, 8000, false);
 	
 
-}
-
+}	
+	
 	ASSET(skillsAuto1_txt);
 void skills() {
    
