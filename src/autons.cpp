@@ -12,17 +12,22 @@ void Close() {
 	pros::lcd::print(2, "Close side auto");
 
 	//actual code
-	Cata.move_relative(200,100);
+	
 	wings.set_value(true);
 	pros::delay(300);
-	arms::chassis::turn(90);
-	
+	arms::chassis::turn(150);
 	pros::delay(250);
-	arms::chassis::turn(330);
-	arms::chassis::move(15);
-	arms::chassis::turn(270);
+	wings.set_value(false);
+	pros::delay(250);
+	arms::chassis::turn(325);
+	pros::delay(250);
 	arms::chassis::move(20);
-	arms::chassis::turn(300);
+	arms::chassis::turn(340);
+	arms::chassis::move(15);
+
+	blocka.set_value(true);
+
+	
 
 }
 void far() {
@@ -62,23 +67,6 @@ void far() {
 	arms::chassis::move(-15,arms::REVERSE);
 	wings.set_value(false);
 	intake.move(0);
-
-
-	
-	
-
-
-	
-
-
-	
-	
-
-	
-
-
-
-	
 
 }
 void skills() {

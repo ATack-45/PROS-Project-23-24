@@ -11,8 +11,8 @@ namespace arms {
 #define ODOM_DEBUG 1
 
 // Negative numbers mean reversed motor
-#define LEFT_MOTORS -10,-9,8
-#define RIGHT_MOTORS 1, 2,-3
+#define LEFT_MOTORS -20,-19,18
+#define RIGHT_MOTORS 11, 12,-13
 #define GEARSET pros::E_MOTOR_GEAR_600 // RPM of chassis motors
 
 // Ticks per inch
@@ -20,8 +20,8 @@ namespace arms {
 #define MIDDLE_TPI  4206.030296875// 3300.6998Ticks per inch for the middle wheel
 
 // Tracking wheel distances
-#define TRACK_WIDTH   13// The distance between left and right wheels (or tracker wheels)
-#define MIDDLE_DISTANCE 3.75 // Distance from middle wheel to the robot turning center
+#define TRACK_WIDTH   10.25// The distance between left and right wheels (or tracker wheels)
+#define MIDDLE_DISTANCE 7 // Distance from middle wheel to the robot turning center
 
 // Sensors
 #define IMU_PORT     20 // Port 20, 0 for disabled

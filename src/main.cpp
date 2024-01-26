@@ -109,29 +109,10 @@ void competition_initialize() {
 
 //auto cata commands
 
-void load() {
-	int CataAngle_a = cata_track.get_angle();
-	while (true) {	
-    
-    if ( 29700 > CataAngle_a)
-		{
-			Cata.brake();
-			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
-            break;
-            
-		}
-		else {
-			Cata.move(100);
-		}
-    }
-}
 
-void fire() {
-	Cata.move_relative(1000,100);
-}
 void autonomous() {
 	int auto_v; 
-	auto_v = floor(auto_select.get_value() /750);
+	auto_v = floor(auto_select.get_value() /1365);
 	pros::lcd::print(2, "Pot auto:%d", auto_v);
 	pros::lcd::print(3, "Pot auto:%d", auto_select.get_value());
 	arms::odom::reset({0,0},0);
@@ -139,40 +120,25 @@ void autonomous() {
 	arms::selector::destroy();
 	pros::lcd::print(1, "ARMS auto:%d", arms::selector::auton);
 	
-if (auto_v >= 5) {
-	switch (arms::selector::auton)
-	{
-	case 0:
-		 //setting tracker wheel up
-		nothing();
-	
-	
-	case 3:
-		 //setting tracker wheel down
-		skills();
-	
-	}
-}
-else {
+
 	switch (auto_v)
 	{
-	case 0: // 4 on wheel
+	case 0: // 1 on wheel
 		 //setting tracker wheel up
-		nothing();
-		
+        skills();
 
-	case 1: // 3 on wheel
+	case 2: // 2 on wheel
 		//setting tracker wheel up
-		far();
+		skills();
 		break;
 	
-	case 3: // 2 on wheel
+	case 3: // 3 on wheel
 		 //setting tracker wheel up
 		Close();
 		break;
 		
 	}
-}
+
 /*switch returns value of () and uses appropiate case, more efficent than if, elif because it only checks once */
 }
 
@@ -195,12 +161,12 @@ bool wing_state;
 	void wing_toggle() {
 		if (wing_state) {
 			wings.set_value(false);
-			pros::delay(1000);
+			pros::delay(5);
 			wing_state = false;
 		}
 		else {
 			wings.set_value(true);
-			pros::delay(1000);
+			pros::delay(5);
 			wing_state = true;
 		}
 	}
@@ -210,6 +176,7 @@ bool wing_state;
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	arms::chassis::setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+    blocka.set_value(false);
 	int CataAngle;
 	int select_value; 
 	bool intake_movef;
@@ -221,17 +188,18 @@ void opcontrol() {
 	CataAngle = cata_track.get_angle();
 	bool safety = false;
 	bool cata_down = false;
-	
+	select_value = floor( drive_select.get_value() / 1400) ;
 	cata_track.set_data_rate(5);
-	cata_track.reset_position();
 	
+	select_value = floor( drive_select.get_value() / 1400) ;
 	int cata_Pull_Angle = 32291;
 	int cata_Move_Angle = cata_Pull_Angle - 00050;
 	while (true) {
 		/* creating and setting variables*/
 		int auto_v; 
-		auto_v = floor(auto_select.get_value() /750);
-		select_value = floor( drive_select.get_value() / 1400) ;
+		auto_v = floor(auto_select.get_value() /1365);
+		
+
 
 
 		/*screen printing dialouge*/
@@ -246,14 +214,25 @@ void opcontrol() {
 		pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
 		pros::lcd::print(6, "Cata Angle:%d", CataAngle);
 		pros::lcd::print(7, "drive-select:%d", select_value);
-		master.print(0, 0, "safety: %d", auto_v);
+		
 
 
 		//odom and PID tuning dialouge
 		
+        
 		if (master.get_digital_new_press(DIGITAL_X)) {
-			Cata.move(100);
-			pros::delay(30000);
+			Cata.move_voltage(11000);
+			int count = 35;
+			master.rumble("...");
+			while (count >= 0){
+				pros::delay(1000);
+				count--;
+				master.print(0, 0, "Time: %d", count);
+				if (master.get_digital_new_press(DIGITAL_A)){
+					count = -1;
+					break;
+				}
+			
 			Cata.move(0);
 		}
 		
@@ -286,7 +265,7 @@ void opcontrol() {
 			else {
 				cata_shoot = false;
 			}
-			if (master.get_digital(DIGITAL_L1)) {
+			if (master.get_digital_new_press(DIGITAL_L1)) {
 				wing_t = true;
 			}
 			else {
@@ -318,7 +297,7 @@ void opcontrol() {
 			else {
 				cata_shoot = false;
 			}
-			if (master.get_digital(DIGITAL_L2)) {
+			if (master.get_digital_new_press(DIGITAL_L2)) {
 				wing_t = true;
 			}
 			else {
@@ -351,7 +330,7 @@ void opcontrol() {
 			}
 			if (master.get_digital(DIGITAL_L2)) {
 				wings.set_value (true);
-				intake.move(-100);
+				
 			}
 			else {
 				wings.set_value (false);
@@ -363,11 +342,11 @@ void opcontrol() {
 
 		//intake controls
 		if (intake_movef) {
-			intake.move(100);
+			intake.move(-100);
 		}
 		
 		else if (intake_moveb){
-			intake.move(-100);
+			intake.move(100);
 		}
 		
 		else {
@@ -375,29 +354,24 @@ void opcontrol() {
 		}
 		
 		//cata controls
-		if ( 32291 > CataAngle && (cata_shoot== 1))
-		{
-			Cata.move_voltage(11000);
-			intake.move_relative(1000,100);
-			pros::delay(250);
-			CataAngle = cata_track.get_angle();
-		}
-		
-		 else if ( 32291 > CataAngle )
-		{
-			Cata.brake();
-			Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
-			pros::delay(5);
-			CataAngle = cata_track.get_angle();
-			cata_down = true;
-		}
-		else if ( CataAngle > 32291 )
-		{
-			Cata.move_voltage(11000);
-			pros::delay(5);
-			CataAngle = cata_track.get_angle();
-			cata_down = false;
-		}
+		if ( 5500 < cata_track.get_position() && (cata_shoot== 1))
+            {
+                Cata.move_voltage(11000);
+                
+                pros::delay(5);
+            }
+            
+            else if ( 5500 < cata_track.get_position() )
+            {
+                Cata.brake();
+                Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
+                pros::delay(5);
+            }
+            else
+            {
+                Cata.move_voltage(10000);
+                pros::delay(5);
+            }
 
 		//wings control
 		if (wing_t) {
@@ -408,46 +382,15 @@ void opcontrol() {
 		if (master.get_digital(DIGITAL_Y)) {
 			blocka.set_value(true);
 		}
-		else if (master.get_digital(DIGITAL_B)) {
+		else if (master.get_digital(DIGITAL_UP)) {
 			blocka.set_value(false);
 		}
-
-
-		/* (master.get_digital(DIGITAL_DOWN)) {
+		 
+		// park control
+		 if (master.get_digital(DIGITAL_DOWN)) {
 			hang.set_value(false);
-		}*/
-
-	
-		
-
-		//safety trigger
-		if (master.get_digital(DIGITAL_RIGHT)) {
-			pros::delay(100);
-			if (safety) {
-			safety = false;
-			}
-			else {
-			safety = true;
-			}
-		}
-
-		//auto shoot 
-		
-		if (ball_sensor.get() <= 10 && safety && cata_down ) {
-			pros::delay(100);
-			Cata.move(100);
-			pros::delay(100);
-		}
-		//catch if cata over rotates
-		if (CataAngle < 2) {
-			Cata.move(100);
-		}
-		if (master.get_digital(DIGITAL_A))
-		{
-			hang.set_value(true);
-			
-			
 		}
 		pros::delay(20);
+	}
 	}
 }
