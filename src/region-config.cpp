@@ -16,13 +16,13 @@ pros::Motor intake(2);
 pros::Motor Cata(1);
 pros::adi::DigitalOut wings(5);
 pros::Rotation cata_track (10);
-pros::adi::Potentiometer drive_select(1);
+pros::adi::Potentiometer drive_select(2);
 pros::adi::Potentiometer auto_select (3);
 pros::Rotation T_wheel(17);
 pros::adi::DigitalOut blocka(4);
 pros::adi::DigitalOut hang(6);
 
-pros::Imu IMU(16 );
+pros::Imu IMU(20);
 
 pros::MotorGroup left_motors({-20,-19,18}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::rotations);
 pros::MotorGroup right_motors({11,12,-13}, pros::v5::MotorGears::blue, pros::v5::MotorUnits::rotations);
@@ -31,7 +31,7 @@ pros::MotorGroup right_motors({11,12,-13}, pros::v5::MotorGears::blue, pros::v5:
 //drivetrain setup
 lemlib::Drivetrain drivetrain(&left_motors, // left motor group
                               &right_motors, // right motor group
-                              10.25, // 13 inch track width 
+                              10.25, // 10.25 inch track width 
                               lemlib::Omniwheel::NEW_325, // using new 3.25" omnis
                               360, // drivetrain rpm is 360
                               2 // chase power is 2. If we had traction wheels, it would have been 8

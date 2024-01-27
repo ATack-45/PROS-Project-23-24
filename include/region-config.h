@@ -24,4 +24,5 @@ extern lemlib::Chassis chassis;
 void Close();
 void far();
 void skills();
-void nothing();
+void Bracket_Close();
+void Bracket_Far();

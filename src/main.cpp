@@ -3,7 +3,7 @@
 #include "lemlib/logger/stdout.hpp"
 #include "pros/misc.h"
 #include "region-config.h"
-#
+
 
 
 /**
@@ -95,17 +95,14 @@ void autonomous() {
 	switch (auto_v)
 	{
 	case 0: // 1 on wheel
-		 //setting tracker wheel up
-		nothing();
+		skils();
 		
 
-	case 1: // 2 on wheel
-		//setting tracker wheel up
+	case 2: // 2 on wheel
 		far();
 		break;
 	
 	case 3: // 3 on wheel
-		 //setting tracker wheel up
 		Close();
 		break;
 		
@@ -150,225 +147,184 @@ bool wing_state;
 
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-    int CataAngle;
-    int select_value; 
-    bool intake_movef;
-    bool intake_moveb;
-    bool cata_shoot;
-    bool wing_t;
-    bool wing_state;
-    std::string select_type;
-    CataAngle = cata_track.get_angle();
-    bool safety = false;
-    bool cata_down = false;
-
+    //reseting blocka from auto
+    blocka.set_value(false);
+    //setting vars
+	bool intake_movef;
+	bool intake_moveb;
+	bool cata_shoot;
+	bool wing_t;
+	std::string select_type;
+	int CataAngle = cata_track.get_angle();
+    cata_track.set_data_rate(5);
+	int select_value = floor( drive_select.get_value() / 2048) + 1 ;
+	int cata_Pull_Angle = 32291;
+	int cata_Move_Angle = cata_Pull_Angle - 00050;
     int leftY;
     int rightY; 
-    
-    cata_track.set_data_rate(5);
-    // cata_track.reset_position();
-    
-   
 
 	while (true) {
-		
-						 
-		
-            /* creating and setting variables*/
-            int auto_v; 
-            auto_v = floor(auto_select.get_value() /1365);
-            select_value = floor( drive_select.get_value() / 1400) ;
-
-
-            /*screen printing dialouge*/
-            // pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-            //                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-            //                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-            // pros::lcd::set_text(0, "X: " + std::to_string(arms::odom::getPosition().x));
-            // pros::lcd::set_text(1, "Y: " + std::to_string(arms::odom::getPosition().y));
-            // pros::lcd::set_text(2, "H: " + std::to_string(arms::odom::getHeading()));
-            // pros::lcd::set_text(3, "Left: " + std::to_string(arms::odom::getLeftEncoder()));
-            // pros::lcd::set_text(4, "Right: " + std::to_string(arms::odom::getRightEncoder()));
-            // pros::lcd::set_text(5, "Middle: " + std::to_string(arms::odom::getMiddleEncoder()));
-            pros::lcd::print(6, "Cata Angle:%d", cata_track.get_position());
-            pros::lcd::print(7, "drive-select:%d", select_value);
-            master.print(0, 0, "safety: %d", auto_v);
-
-
-            //odom and pid manual tuning dialog
-            if (master.get_digital(DIGITAL_X)){
-                chassis.setPose(-51.616,-56.67,225);
-                chassis.follow(skillsAuto1_txt, 20  , 15000,false);
-                chassis.waitUntilDone();
-                
-            }
-
-                            
-            // controller profiles
-
-            switch (select_value)
-            {
-            case 0:
-                // Arcade control scheme
-                // get joystick positions
-                leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-                rightY = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
-                // move the chassis with curvature drive
-                chassis.tank(leftY,rightY);
-                select_type = "parker";
-
-                //button controls
-                if (master.get_digital(DIGITAL_R2)){
-                    intake_movef = true;
-                }
-                else if (master.get_digital(DIGITAL_L2))
-                {
-                    intake_moveb = true;
-                }
-                else {
-                    intake_movef = false;
-                    intake_moveb = false;
-                }
-                if (master.get_digital(DIGITAL_R1)) {
-                    cata_shoot = true;
-                }
-                else {
-                    cata_shoot = false;
-                }
-                if (master.get_digital_new_press(DIGITAL_L1)) {
-                    wing_t = true;
-                }
-                else {
-                    wing_t = false;
-                }
-            break;
-
-            case 1:
-                // Arcade control scheme
-                // get joystick positions
-                leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-                rightY = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-                // move the chassis with curvature drive
-                chassis.curvature(leftY, rightY);
-                select_type = "Alec";
-
-                //button controls 
-                if (master.get_digital(DIGITAL_R1)){
-                    intake_movef = true;
-                }
-                else if (master.get_digital(DIGITAL_L1))
-                {
-                    intake_moveb = true;
-                }
-                else {
-                    intake_movef = false;
-                    intake_moveb = false;
-                }
-                if (master.get_digital(DIGITAL_R2)) {
-                    cata_shoot = true;
-                }
-                else {
-                    cata_shoot = false;
-                }
-                if (master.get_digital_new_press(DIGITAL_L2)) {
-                    wing_t = true;
-                }
-                else {
-                    wing_t = false;
-                }
-            break;
-
-            case 2:
-                // Arcade control scheme
-                // get joystick positions
-                leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-                rightY = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-                // move the chassis with curvature drive
-                chassis.curvature(leftY, rightY);
-                select_type = "drew";
-
-                //button controls
-                if (master.get_digital(DIGITAL_R1)){
-                    intake_movef = true;
-                }
-                else if (master.get_digital(DIGITAL_R2))
-                {
-                    intake_moveb = true;
-                }
-                else {
-                    intake_movef = false;
-                    intake_moveb = false;
-                }
-                if (master.get_digital(DIGITAL_L1)) {
-                    cata_shoot = true;
-                }
-                else {
-                    cata_shoot = false;
-                }
-                if (master.get_digital(DIGITAL_L2)) {
-                    wings.set_value (true);
-                }
-                else {
-                    wings.set_value (false);
-                }
-            break;
-            
-            }
-
-
-            //intake controls
-            if (intake_movef) {
-                intake.move(-100);
-            }
-            
-            else if (intake_moveb){
-                intake.move(100);
-            }
-            
-            else {
-                intake.move(0);
-            }
-            
-            //cata controls
-            
-            if ( 6000 < cata_track.get_position() && (cata_shoot== 1))
-            {
-                Cata.move_voltage(11000);
-                
-                pros::delay(250);
-            }
-            
-            else if ( 6000 < cata_track.get_position() )
-            {
-                Cata.brake();
-                Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
-                pros::delay(5);
-            }
-            else
-            {
-                Cata.move_voltage(11000);
-                pros::delay(5);
-            }
+        /* creating and setting variables*/
+        int auto_v; 
+        auto_v = floor(auto_select.get_value() /1365);
         
-           
-            //wings control
-            if (wing_t) {
-                wing_toggle();
+
+
+        /*screen printing dialouge*/
+        pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
+                        (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
+                        (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+        pros::lcd::print(6, "Cata Angle:%d", CataAngle);
+        pros::lcd::print(7, "drive-select:%d", select_value);
+        
+
+
+        //odom and pid manual tuning dialog
+       if (master.get_digital_new_press(DIGITAL_X)) {
+			Cata.move_voltage(11000);
+			int count = 35;
+			master.rumble("...");
+			while (count >= 0){
+				pros::delay(1000);
+				count--;
+				master.print(0, 0, "Time: %d", count);
+				if (master.get_digital_new_press(DIGITAL_A)){
+					count = -1;
+					break;
+				}	
             }
-            
-            //blocker controls 
-            if (master.get_digital(DIGITAL_Y)) {
-                blocka.set_value(true);
+            Cata.move(0);
+		}
+		
+                        
+        // controller profiles
+        switch (select_value)
+        {
+        case 1:
+            // Arcade control scheme
+            // get joystick positions
+            leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+            rightY = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+            // move the chassis with curvature drive
+            chassis.curvature(leftY, rightY);
+            select_type = "Alec";
+
+            //button controls 
+            if (master.get_digital(DIGITAL_R1)){
+                intake_movef = true;
             }
-            else if (master.get_digital(DIGITAL_B)) {
-                blocka.set_value(false);
-            }
-           
-            //hang deploy
-            if (master.get_digital(DIGITAL_A))
+            else if (master.get_digital(DIGITAL_L1))
             {
-                hang.set_value(true);
+                intake_moveb = true;
             }
-            pros::delay(10);
+            else {
+                intake_movef = false;
+                intake_moveb = false;
+            }
+            if (master.get_digital(DIGITAL_R2)) {
+                cata_shoot = true;
+            }
+            else {
+                cata_shoot = false;
+            }
+            if (master.get_digital_new_press(DIGITAL_L2)) {
+                wing_t = true;
+            }
+            else {
+                wing_t = false;
+            }
+        break;
+
+        case 2:
+            // Arcade control scheme
+            // get joystick positions
+            leftY = master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+            rightY = master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+            // move the chassis with curvature drive
+            chassis.curvature(leftY, rightY);
+            select_type = "drew";
+
+            //button controls
+            if (master.get_digital(DIGITAL_R1)){
+                intake_movef = true;
+            }
+            else if (master.get_digital(DIGITAL_R2))
+            {
+                intake_moveb = true;
+            }
+            else {
+                intake_movef = false;
+                intake_moveb = false;
+            }
+            if (master.get_digital(DIGITAL_L1)) {
+                cata_shoot = true;
+            }
+            else {
+                cata_shoot = false;
+            }
+            if (master.get_digital(DIGITAL_L2)) {
+                wings.set_value (true);
+            }
+            else {
+                wings.set_value (false);
+            }
+        break;
+        }
+
+
+        //intake controls
+        if (intake_movef) {
+            intake.move(-100);
+        }
+        
+        else if (intake_moveb){
+            intake.move(100);
+        }
+        
+        else {
+            intake.move(0);
+        }
+        
+        //cata controls
+        
+        if ( 5500 < cata_track.get_position() && (cata_shoot== 1))
+        {
+            Cata.move_voltage(11000);
+            
+            pros::delay(5);
+        }
+        
+        else if ( 5500 < cata_track.get_position() )
+        {
+            Cata.brake();
+            Cata.set_brake_mode(MOTOR_BRAKE_HOLD);
+            pros::delay(5);
+        }
+        else
+        {
+            Cata.move_voltage(11000);
+            pros::delay(5);
+        }
+    
+        
+        //wings control
+        if (wing_t) {
+            wing_toggle();
+        }
+        
+        //blocker controls 
+        if (master.get_digital(DIGITAL_Y)) {
+            blocka.set_value(true);
+        }
+        else if (master.get_digital(DIGITAL_B)) {
+            blocka.set_value(false);
+        }
+        
+        //hang deploy
+        if (master.get_digital(DIGITAL_DOWN))
+        {
+            hang.set_value(true);
+        }
+        pros::delay(10);
     }  
 }

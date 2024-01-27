@@ -4,6 +4,7 @@
 #include "Region-config.h"
 #include "pros/adi.hpp"
 
+	// Close paths
 	ASSET(Close1_txt);
 void Close() {
 	//init stuff
@@ -17,6 +18,7 @@ void Close() {
 	chassis.turnTo(19,-11,5);
 }
 
+	//Far paths
 	ASSET(Far1_txt);
 	ASSET(Far2_txt);
 void far() {
@@ -34,7 +36,7 @@ void far() {
 	
 
 }	
-	
+	//skills paths
 	ASSET(skillsAuto1_txt);
 void skills() {
    
@@ -46,9 +48,13 @@ void skills() {
     chassis.follow(skillsAuto1_txt, 20  , 15000,false);
     chassis.waitUntilDone();
 }
-void nothing() {
-	int auto_v; 
-	auto_v = floor(auto_select.get_value() /750);
-	pros::lcd::print(2, "Pot auto:%d", auto_v);
-	pros::lcd::print(2, "No auto");
+
+	//bracket close paths
+void Bracket_Close() {
+
+}
+
+	//bracket far paths 
+void Bracket_Far() {
+	
 }
