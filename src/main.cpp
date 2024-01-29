@@ -118,7 +118,7 @@ void autonomous() {
 	arms::odom::reset({0,0},0);
 	arms::odom::imu.reset();
 	arms::selector::destroy();
-	pros::lcd::print(1, "ARMS auto:%d", arms::selector::auton);
+	pros::lcd::print(1, "AR	MS auto:%d", arms::selector::auton);
 	
 
 	switch (auto_v)
@@ -231,11 +231,9 @@ void opcontrol() {
 				if (master.get_digital_new_press(DIGITAL_A)){
 					count = -1;
 					break;
-				}
-			
-			Cata.move(0);
+				}	
 		}
-		
+		Cata.move(0);
 
 						 
 		// controller profiles
