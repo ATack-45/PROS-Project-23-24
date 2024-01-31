@@ -32,6 +32,8 @@ void on_center_button() {
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+    // cata_track.reset_position(); // uncomment to reset cata position if not working
+	
 
 
     // the default rate is 50. however, if you need to change the rate, you
@@ -95,7 +97,7 @@ void autonomous() {
 	switch (auto_v)
 	{
 	case 0: // 1 on wheel
-		skils();
+		skills();
 		
 
 	case 2: // 2 on wheel
@@ -140,15 +142,14 @@ bool wing_state;
 		}
 	}
     //adding paths
-    ASSET(example_txt);
-    ASSET(path_txt);
-    ASSET(Test_txt);
-    ASSET(skillsAuto1_txt);
+	ASSET(Debug_txt);
+	ASSET(skillsAuto1_txt);
 
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
     //reseting blocka from auto
     blocka.set_value(false);
+	
     //setting vars
 	bool intake_movef;
 	bool intake_moveb;
@@ -167,34 +168,43 @@ void opcontrol() {
         /* creating and setting variables*/
         int auto_v; 
         auto_v = floor(auto_select.get_value() /1365);
-        
-
-
+		int CataAngle = cata_track.get_angle();
         /*screen printing dialouge*/
-        pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-                        (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-                        (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+        
         pros::lcd::print(6, "Cata Angle:%d", CataAngle);
         pros::lcd::print(7, "drive-select:%d", select_value);
+		
         
 
 
-        //odom and pid manual tuning dialog
+        //auto shoot macro
        if (master.get_digital_new_press(DIGITAL_X)) {
 			Cata.move_voltage(11000);
 			int count = 35;
 			master.rumble("...");
-			while (count >= 0){
+			while (count > 0){
 				pros::delay(1000);
 				count--;
 				master.print(0, 0, "Time: %d", count);
 				if (master.get_digital_new_press(DIGITAL_A)){
-					count = -1;
-					break;
+					count = 0;
 				}	
             }
             Cata.move(0);
+			master.clear_line(0);
 		}
+
+		//odom and PID tuning
+		if (master.get_digital_new_press(DIGITAL_A)){
+			// chassis.setPose(43.32,-65.542,0);
+			// chassis.follow(Debug_txt, 15, 10000);
+			// chassis.waitUntilDone();
+
+			// chassis.turnTo(30,0,1000);
+            
+            chassis.moveToPoint(0,35,10000);
+		}
+
 		
                         
         // controller profiles
