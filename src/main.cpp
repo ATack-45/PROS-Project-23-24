@@ -32,6 +32,11 @@ void on_center_button() {
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+    lvgl_init();
+    lemlib::FAPID::init();
+    
+    
+
     // cata_track.reset_position(); // uncomment to reset cata position if not working
 	
 
@@ -64,7 +69,13 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {
+    while (true)
+    {
+        /* code */
+    }
+    
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -75,7 +86,11 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+    int auto_v; 
+	auto_v = floor(auto_select.get_value() /1365);
+	pros::lcd::print(3, "Pot auto:%d",auto_v);
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -91,7 +106,6 @@ void competition_initialize() {}
 void autonomous() {
     int auto_v; 
 	auto_v = floor(auto_select.get_value() /1365);
-	pros::lcd::print(2, "Pot auto:%d", auto_v);
 	pros::lcd::print(3, "Pot auto:%d", auto_select.get_value());
 	
 	switch (auto_v)
@@ -100,12 +114,12 @@ void autonomous() {
 		skills();
 		
 
-	case 2: // 2 on wheel
-		far();
+	case 1: // 2 on wheel
+		Close();
 		break;
 	
 	case 3: // 3 on wheel
-		Close();
+		far();
 		break;
 		
 	}
@@ -143,7 +157,7 @@ bool wing_state;
 	}
     //adding paths
 	ASSET(Debug_txt);
-	ASSET(skillsAuto1_txt);
+    ASSET(Far1_txt);
 
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
@@ -166,21 +180,25 @@ void opcontrol() {
 
 	while (true) {
         /* creating and setting variables*/
-        int auto_v; 
-        auto_v = floor(auto_select.get_value() /1365);
+        
 		int CataAngle = cata_track.get_angle();
         /*screen printing dialouge*/
+
+        int auto_v; 
+        auto_v = floor(auto_select.get_value() /1365);
+        pros::lcd::print(5, "Pot auto:%d", auto_v);
+        
         
         pros::lcd::print(6, "Cata Angle:%d", CataAngle);
         pros::lcd::print(7, "drive-select:%d", select_value);
-		
+        
         
 
 
-        //auto shoot macro
+        //auto shoot macro  
        if (master.get_digital_new_press(DIGITAL_X)) {
-			Cata.move_voltage(11000);
-			int count = 35;
+			Cata.move_voltage(11500);
+			int count = 33;
 			master.rumble("...");
 			while (count > 0){
 				pros::delay(1000);
@@ -196,13 +214,18 @@ void opcontrol() {
 
 		//odom and PID tuning
 		if (master.get_digital_new_press(DIGITAL_A)){
-			// chassis.setPose(43.32,-65.542,0);
-			// chassis.follow(Debug_txt, 15, 10000);
-			// chassis.waitUntilDone();
-
-			// chassis.turnTo(30,0,1000);
-            
-            chassis.moveToPoint(0,35,10000);
+            chassis.setPose(-46.718,-62.6,50);
+            // intake.move(-100);
+			// chassis.setPose(-52.905,56.902,135);
+			// chassis.follow(Far1_txt, 13,4000);
+            // chassis.waitUntilDone();
+            // pros::delay(250);
+            // chassis.turnTo(-50,4,1000);
+            // pros::delay(500);
+            // intake.move(127);
+            // wings.set_value(true);
+            // chassis.moveToPose(-47.435,0.439,270,2000);          
+        
 		}
 
 		

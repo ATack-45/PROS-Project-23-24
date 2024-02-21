@@ -28,6 +28,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+
 #else /* (not) __cplusplus */
 #include <errno.h>
 #include <math.h>
@@ -61,6 +62,7 @@
 #include "pros/rtos.h"
 #include "pros/screen.h"
 #include "pros/vision.h"
+
 
 #ifdef __cplusplus
 #include "pros/adi.hpp"

@@ -73,11 +73,11 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/autons.cpp.o",
-            "src\\autons.cpp"
+            "bin/region-config.cpp.o",
+            "src\\region-config.cpp"
         ],
         "directory": "C:\\Users\\tacki_cdxdcbs\\Documents\\PROS-Project",
-        "file": "src\\autons.cpp"
+        "file": "src\\region-config.cpp"
     },
     {
         "arguments": [
@@ -113,10 +113,10 @@
             "-funwind-tables",
             "--std=gnu++17",
             "-o",
-            "bin/region-config.cpp.o",
-            "src\\region-config.cpp"
+            "bin/autons.cpp.o",
+            "src\\autons.cpp"
         ],
         "directory": "C:\\Users\\tacki_cdxdcbs\\Documents\\PROS-Project",
-        "file": "src\\region-config.cpp"
+        "file": "src\\autons.cpp"
     }
 ]

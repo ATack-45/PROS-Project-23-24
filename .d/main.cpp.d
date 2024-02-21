@@ -17,8 +17,10 @@ bin/main.cpp.o: src/main.cpp include/main.h include/api.h \
  include/pros/motors.hpp include/pros/motors.hpp include/pros/optical.hpp \
  include/pros/optical.h include/pros/rotation.hpp include/pros/rotation.h \
  include/pros/rtos.hpp include/pros/screen.hpp include/pros/screen.h \
- include/pros/vision.hpp include/pros/vision.h include/lemlib/api.hpp \
- include/lemlib/util.hpp include/lemlib/pose.hpp include/lemlib/pid.hpp \
+ include/pros/vision.hpp include/pros/vision.h include/pros/apix.h \
+ include/api.h include/pros/device.h include/pros/serial.h \
+ include/pros/serial.hpp include/lemlib/api.hpp include/lemlib/util.hpp \
+ include/lemlib/pose.hpp include/lemlib/pid.hpp \
  include/lemlib/chassis/trackingWheel.hpp include/pros/motor_group.hpp \
  include/pros/adi.hpp include/pros/rotation.hpp \
  include/lemlib/chassis/chassis.hpp include/pros/imu.hpp \
@@ -86,6 +88,11 @@ include/pros/screen.hpp:
 include/pros/screen.h:
 include/pros/vision.hpp:
 include/pros/vision.h:
+include/pros/apix.h:
+include/api.h:
+include/pros/device.h:
+include/pros/serial.h:
+include/pros/serial.hpp:
 include/lemlib/api.hpp:
 include/lemlib/util.hpp:
 include/lemlib/pose.hpp:
